@@ -3,36 +3,20 @@ package com.febriandi.agrojaya.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -40,119 +24,267 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.febriandi.agrojaya.R
+import com.febriandi.agrojaya.component.ArtikelItem
+import com.febriandi.agrojaya.component.CarouselCard
+import com.febriandi.agrojaya.data.DummyData
+import com.febriandi.agrojaya.model.Artikel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    artikels: List<Artikel> = DummyData.artikel,
+) {
     var search by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo3),
-                contentDescription = "Logo",
+        // Static content (non-scrollable)
+        Column {
+            // Logo
+            Box(
                 modifier = Modifier
-                    .width(200.dp)
-                    .padding(top = 40.dp, end = 30.dp)
-                    .align(Alignment.TopEnd)
-            )
-        }
-
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp, vertical = 10.dp)
-        ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.profile),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier.size(70.dp)
-                )
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Hi, Adjie Cahya R",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
-            Button(
-                onClick = {
-                          
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.green_400)
-                ),
-                shape = RoundedCornerShape(30.dp),
-                contentPadding = PaddingValues(0.dp),
-                modifier = Modifier.size(40.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icon_notifikasi),
-                    contentDescription = "Back Icon",
-                    modifier = Modifier.size(30.dp)
+                    painter = painterResource(id = R.drawable.logo3),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .width(200.dp)
+                        .padding(top = 20.dp)
+                        .align(Alignment.TopEnd)
                 )
             }
-        }
 
-        TextField(
-            value = search,
-            onValueChange = { search = it },
-            label = {
-                Text(
-                    text = "Telusuri",
-                    fontFamily = CustomFontFamily
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = colorResource(id = R.color.fill_form),
-                focusedBorderColor = colorResource(id = R.color.green_100),
-                focusedTextColor = colorResource(id = R.color.text_color),
-                focusedLabelColor = colorResource(id = R.color.green_500),
-                unfocusedBorderColor = colorResource(id = R.color.stroke_form),
-                cursorColor = colorResource(id = R.color.text_color)
-            ),
-            textStyle = TextStyle(
-                fontSize = 14.sp,
-                color = colorResource(id = R.color.text_color),
-                fontFamily = CustomFontFamily
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 30.dp),
-            trailingIcon = {
-                IconButton(onClick = { /* Handle search action */ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.icon_search), // Ganti dengan resource icon pencarian kamu
-                        contentDescription = "Pencarian",
-                        tint = colorResource(id = R.color.green_500)
+            // Profile and notification section
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 20.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(60.dp)
+                            .border(
+                                width = 2.dp,
+                                color = colorResource(id = R.color.green_400),
+                                shape = CircleShape
+                            )
+                            .clip(CircleShape)
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        text = "Hi, Adjie Cahya",
+                        fontSize = 14.sp,
+                        fontFamily = CustomFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colorResource(id = R.color.text_color)
+                    )
+                }
+                Button(
+                    onClick = {
+                        navController.navigate("notifikasi")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.green_400)
+                    ),
+                    shape = RoundedCornerShape(30.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_notifikasi),
+                        contentDescription = "Back Icon",
+                        modifier = Modifier.size(30.dp)
                     )
                 }
             }
-        )
+
+            // Search field
+            OutlinedTextField(
+                value = search,
+                onValueChange = { search = it },
+                label = null,
+                placeholder = {
+                    Text(
+                        text = "Telusuri",
+                        fontFamily = CustomFontFamily
+                    )
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(30.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    containerColor = colorResource(id = R.color.green_100),
+                    focusedBorderColor = colorResource(id = R.color.green_100),
+                    focusedTextColor = colorResource(id = R.color.text_color),
+                    focusedLabelColor = colorResource(id = R.color.green_500),
+                    unfocusedBorderColor = colorResource(id = R.color.stroke_form),
+                    cursorColor = colorResource(id = R.color.text_color)
+                ),
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.text_color),
+                    fontFamily = CustomFontFamily
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp, horizontal = 20.dp)
+                    .height(50.dp),
+                trailingIcon = {
+                    IconButton(onClick = { /* Handle search action */ }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_search),
+                            contentDescription = "Pencarian",
+                            tint = colorResource(id = R.color.text_color),
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            )
+
+
+        }
+
+        // Scrollable content
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item {
+                // Carousel
+                CarouselCard()
+                // Jadwal Kegiatan Section
+                Text(
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                    text = "Jadwal kegiatan",
+                    fontSize = 14.sp,
+                    fontFamily = CustomFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colorResource(id = R.color.green_500)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.calender),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .alpha(0.8f),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Atur Jadwal Aktivitas \nBertanimu",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = CustomFontFamily,
+                            color = colorResource(id = R.color.text_color),
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+
+                        Button(
+                            onClick = { /* TODO: Handle click */ },
+                            contentPadding = PaddingValues(0.dp),
+                            modifier = Modifier
+                                .width(150.dp)
+                                .height(50.dp)
+                                .padding(top = 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.green_400)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = "Atur Sekarang",
+                                fontSize = 12.sp,
+                                fontFamily = CustomFontFamily,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                    }
+                }
+
+                // Artikel Header
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = 20.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(vertical = 10.dp),
+                        text = "Artikel",
+                        fontSize = 14.sp,
+                        fontFamily = CustomFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colorResource(id = R.color.green_500)
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .clickable {
+                                navController.navigate("artikel")
+                            },
+                        text = "Lihat Semua",
+                        fontSize = 14.sp,
+                        fontFamily = CustomFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colorResource(id = R.color.green_500)
+                    )
+                }
+            }
+
+            // Artikel Items
+            items(
+                items = artikels.take(3),
+                key = { it.id }
+            ) { artikel ->
+                ArtikelItem(
+                    artikel = artikel,
+                    onItemClicked = {
+                        navController.navigate("detailArtikel/${artikel.id}")
+                    }
+                )
+            }
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController = navController)
 }

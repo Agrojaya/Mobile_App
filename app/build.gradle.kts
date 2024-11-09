@@ -69,4 +69,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation ("androidx.compose.foundation:foundation:1.5.0")
+    implementation("androidx.compose.ui:ui-util:1.7.5")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.1")
+
+
 }

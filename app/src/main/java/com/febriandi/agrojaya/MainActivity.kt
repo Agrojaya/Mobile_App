@@ -1,6 +1,5 @@
 package com.febriandi.agrojaya
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,7 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Install splash screen and keep it until loading is complete
+
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 splashScreenViewModel.isLoading.value
@@ -35,20 +34,40 @@ class MainActivity : ComponentActivity() {
         setContent {
             AgroJayaTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "onboarding") {
-                   composable("onboarding") { OnboardingScreen(onFinished = {
-                       navController.navigate("afterOnboarding")
-                   })}
-                    composable("afterOnboarding") { AfterOnboarding(navController)  }
-                    composable("login") { LoginScreen(navController) }
-                    composable("register") { RegisterScreen(navController)  }
-                    composable("mainScreen") { MainScreen()  }
+                NavHost(
+                    navController = navController,
+                    startDestination = "onboarding"
+                ) {
+                    composable("onboarding") {
+                        OnboardingScreen(onFinished = {
+                            navController.navigate("afterOnboarding") {
+                                popUpTo("onboarding") { inclusive = true }
+                            }
+                        })
+                    }
+
+                    composable("afterOnboarding") {
+                        AfterOnboarding(navController)
+                    }
+
+                    composable("login") {
+                        LoginScreen(navController)
+                    }
+
+                    composable("register") {
+                        RegisterScreen(navController)
+                    }
+
+                    composable("mainScreen") {
+                        MainScreen()
+                    }
+
+
                 }
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
