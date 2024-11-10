@@ -54,7 +54,7 @@ fun ArtikelScreen(
                 .padding(vertical = 20.dp, horizontal = 20.dp)
         ) {
             ButtonBack {
-                navController.navigate("home")
+                navController.popBackStack()
             }
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp),

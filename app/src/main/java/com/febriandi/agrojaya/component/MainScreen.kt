@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,16 +28,18 @@ import androidx.navigation.navArgument
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.screens.ArtikelScreen
 import com.febriandi.agrojaya.screens.DetailArtikelScreen
+import com.febriandi.agrojaya.screens.DetailPaketScreen
 import com.febriandi.agrojaya.screens.HomeScreen
 import com.febriandi.agrojaya.screens.NotifikasiScreen
 import com.febriandi.agrojaya.screens.PaketScreen
+import com.febriandi.agrojaya.screens.PembelianScreen
 import com.febriandi.agrojaya.screens.ProfileScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val navItemList = listOf(
         NavItem("Beranda", R.drawable.icon_home),
@@ -102,26 +105,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding) // Apply inner padding here
                 .fillMaxSize()
         ) {
-            composable("home") { HomeScreen(navController) }
-            composable("paket") { PaketScreen() }
+            composable("home") { HomeScreen(
+                navController = navController,
+                rootNavController = rootNavController
+            )}
+            composable("paket") { PaketScreen(
+                navController = navController,
+                rootNavController = rootNavController
+            ) }
             composable("profile") { ProfileScreen() }
-            composable("artikel") { ArtikelScreen(navController) }
-            composable( "notifikasi") { NotifikasiScreen(navController)  }
-            composable(
-                "detailArtikel/{artikelId}",
-                arguments = listOf(
-                    navArgument("artikelId") {
-                        type = NavType.IntType
-                        nullable = false
-                    }
-                )
-            ) { backStackEntry ->
-                DetailArtikelScreen(
-                    navController = navController,
-                    artikelId = backStackEntry.arguments?.getInt("artikelId")
-                )
-            }
-
         }
     }
 }
@@ -130,5 +122,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    val navController = rememberNavController()
+    MainScreen(rootNavController = navController)
 }

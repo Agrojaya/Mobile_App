@@ -72,6 +72,7 @@ fun ArtikelItem(
             ) {
                 Text(
                     text = artikel.judul,
+                    overflow = TextOverflow.Ellipsis,
                     fontSize = 14.sp,
                     color = colorResource(id = R.color.text_color),
                     fontWeight = FontWeight.Bold,

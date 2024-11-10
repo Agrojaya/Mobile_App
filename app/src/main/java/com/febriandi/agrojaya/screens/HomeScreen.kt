@@ -37,6 +37,7 @@ import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 @Composable
 fun HomeScreen(
     navController: NavController,
+    rootNavController: NavController,
     modifier: Modifier = Modifier,
     artikels: List<Artikel> = DummyData.artikel,
 ) {
@@ -100,7 +101,7 @@ fun HomeScreen(
                 }
                 Button(
                     onClick = {
-                        navController.navigate("notifikasi")
+                        rootNavController.navigate("notifikasi")
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.green_400)
@@ -255,7 +256,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(vertical = 10.dp)
                             .clickable {
-                                navController.navigate("artikel")
+                                rootNavController.navigate("artikel")
                             },
                         text = "Lihat Semua",
                         fontSize = 14.sp,
@@ -274,7 +275,7 @@ fun HomeScreen(
                 ArtikelItem(
                     artikel = artikel,
                     onItemClicked = {
-                        navController.navigate("detailArtikel/${artikel.id}")
+                        rootNavController.navigate("detailArtikel/${artikel.id}")
                     }
                 )
             }
@@ -282,9 +283,4 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    HomeScreen(navController = navController)
-}
+
