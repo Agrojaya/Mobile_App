@@ -1,7 +1,9 @@
-package com.febriandi.agrojaya.onboarding
+package com.febriandi.agrojaya.screens.register
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,11 +31,54 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.febriandi.agrojaya.R
 import androidx.compose.foundation.border
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.screens.login.LoginViewModel
+import com.febriandi.agrojaya.utils.Constant.CLIENT
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.launch
 import androidx.compose.material3.Text as Text
 
 @Composable
-fun AfterOnboarding(navController: NavController) {
+fun AfterOnboarding(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val state = viewModel.state.collectAsState(initial = null)
+    val googleLoginState = viewModel.stateGoogle.value
+
+    // Google Sign-In launcher
+    @Suppress("DEPRECATION")
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try {
+                val result = account.getResult(ApiException::class.java)
+                val credential = GoogleAuthProvider.getCredential(result.idToken, null)
+
+                // Firebase authentication
+                viewModel.loginWithGoogle(credential) {
+                    navController.navigate("mainScreen") {
+                        popUpTo("onboarding") {
+                            inclusive = true
+                        }
+                    }
+                }
+            } catch (it: ApiException) {
+                Toast.makeText(context, "Google sign-in failed: $it", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +103,6 @@ fun AfterOnboarding(navController: NavController) {
             }
         )
 
-
         ButtonComponent(
             text = "Daftar Akun",
             onClick = {
@@ -72,7 +116,7 @@ fun AfterOnboarding(navController: NavController) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Divider(
-                color = colorResource(id = R.color.natural_500 ),
+                color = colorResource(id = R.color.natural_500),
                 thickness = 1.dp,
                 modifier = Modifier
                     .weight(1f)
@@ -81,11 +125,11 @@ fun AfterOnboarding(navController: NavController) {
             Text(
                 text = "Atau Masuk Dengan",
                 fontSize = 14.sp,
-                color = colorResource(id = R.color.text_color ),
+                color = colorResource(id = R.color.text_color),
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Divider(
-                color = colorResource(id = R.color.natural_500 ),
+                color = colorResource(id = R.color.natural_500),
                 thickness = 1.dp,
                 modifier = Modifier
                     .weight(1f)
@@ -94,11 +138,24 @@ fun AfterOnboarding(navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(35.dp))
-
+        if (state.value?.loading == true) {
+            Spacer(modifier = Modifier.height(20.dp))
+            CircularProgressIndicator(
+                color = colorResource(id = R.color.green_400),
+                modifier = Modifier.size(40.dp)
+            )
+        }
 
         Button(
             onClick = {
-                // Handle Google login
+                val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken(CLIENT)
+                    .build()
+
+                @Suppress("DEPRECATION")
+                val googleSignInClient = GoogleSignIn.getClient(context, googleSignInOptions)
+                launcher.launch(googleSignInClient.signInIntent)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent // Transparent background
@@ -128,12 +185,27 @@ fun AfterOnboarding(navController: NavController) {
             )
         }
     }
+    LaunchedEffect(key1 = state.value?.success) {
+        coroutineScope.launch {
+            if (state.value?.success?.isNotEmpty() == true) {
+                val success = state.value?.success
+                Toast.makeText(context, "$success", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    LaunchedEffect(key1 = state.value?.error) {
+        coroutineScope.launch {
+            if (state.value?.error?.isNotEmpty() == true) {
+                val error = state.value?.error
+                Toast.makeText(context, "$error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AfterOnboardingPreview() {
-    // Use rememberNavController to provide a NavController in the preview
     val navController = rememberNavController()
     AfterOnboarding(navController = navController)
 }

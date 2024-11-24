@@ -1,28 +1,16 @@
-package com.febriandi.agrojaya.screens
+package com.febriandi.agrojaya.screens.Paket
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,59 +21,109 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
-import com.febriandi.agrojaya.data.DummyData
-import com.febriandi.agrojaya.model.Paket
-import com.febriandi.agrojaya.onboarding.ButtonUI
+import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+import com.febriandi.agrojaya.utils.Resource
 
 @Composable
 fun DetailPaketScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    paketId: Int?
+    paketId: Int?,
+    viewModel: DetailPaketViewModel = hiltViewModel()
 ) {
-    val newPaketList = DummyData.paket.filter { paket ->
-        paket.id == paketId
+    val paketState = viewModel.paketState.collectAsState()
+
+    LaunchedEffect(paketId) {
+        paketId?.let { viewModel.loadPaket(it) }
     }
 
-    if (newPaketList.isNotEmpty()) {
-        DetailPaketContent(
-            paket = newPaketList[0],
-            onItemClicked = {
-                            navController.navigate("pemesanan/$paketId")
-            },
-            onBackClick = {
-                navController.navigateUp()
-            })
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (val state = paketState.value) {
+            is Resource.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = colorResource(id = R.color.green_500)
+                    )
+                }
+            }
+            is Resource.Success -> {
+                DetailPaketContent(
+                    paket = state.data,
+                    onItemClicked = {
+                        navController.navigate("pemesanan/$paketId")
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            is Resource.Error -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = state.message ?: "Terjadi kesalahan",
+                        color = Color.Red,
+                        fontFamily = CustomFontFamily
+                    )
+                    Button(
+                        onClick = { paketId?.let { viewModel.loadPaket(it) } },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.green_500)
+                        )
+                    ) {
+                        Text(
+                            text = "Coba Lagi",
+                            fontFamily = CustomFontFamily,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
 private fun DetailPaketContent(
-    paket: Paket,
+    paket: PaketResponse,
     onBackClick: () -> Unit,
     onItemClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val categories = listOf(
-        "Cabai", "Bayam", "Kangkung", "Selada", "Tomat",
-        "Pak Choi", "Kailan", "Sawi", "Basil", "Mint"
-    )
-    val selectedCategory = ""
+    val horizontalScrollState = rememberScrollState()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+
+
+    // Convert variasi_bibit string to list
+    val categories = paket.variasi_bibit
+        .replace("\"", "")
+        .split(",")
+        .map { it.trim() }
+
+    // Split categories into two rows
+    val firstRowCategories = categories.take(categories.size / 2 + categories.size % 2)
+    val secondRowCategories = categories.drop(categories.size / 2 + categories.size % 2)
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -109,16 +147,14 @@ private fun DetailPaketContent(
                 )
             }
 
-            // Scrollable Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
             ) {
-                // Image
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(data = paket.photo)
+                        .data(paket.photo)
                         .build(),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -129,7 +165,6 @@ private fun DetailPaketContent(
                     contentDescription = "Foto Paket"
                 )
 
-                // Package Details
                 Text(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     text = paket.nama_paket,
@@ -143,7 +178,7 @@ private fun DetailPaketContent(
                 Text(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     style = TextStyle(lineHeight = 22.sp),
-                    text = paket.harga,
+                    text = "Rp ${String.format("%,d", paket.harga).replace(',', '.')}",
                     fontSize = 18.sp,
                     fontFamily = CustomFontFamily,
                     fontWeight = FontWeight.Bold,
@@ -159,27 +194,42 @@ private fun DetailPaketContent(
                     color = colorResource(id = R.color.text_color)
                 )
 
-                // Grid Layout for Categories
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                // Categories container with synchronized horizontal scroll
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 10.dp)
+                        .horizontalScroll(horizontalScrollState)
                 ) {
-                    items(categories.chunked(2)) { rowItems ->
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                    Column {
+                        // First row of categories
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
                         ) {
-                            rowItems.forEach { category ->
+                            firstRowCategories.forEach { category ->
                                 CategoryItem(
                                     category = category,
-                                    isSelected = category == selectedCategory
+                                    isSelected = false
+                                )
+                            }
+                        }
+
+                        // Second row of categories
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        ) {
+                            secondRowCategories.forEach { category ->
+                                CategoryItem(
+                                    category = category,
+                                    isSelected = false
                                 )
                             }
                         }
                     }
                 }
+
                 Text(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                     text = "Fitur",
@@ -189,18 +239,26 @@ private fun DetailPaketContent(
                     color = colorResource(id = R.color.text_color)
                 )
 
-                Text(
-                    text = paket.fitur,
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = CustomFontFamily,
-                    color = colorResource(id = R.color.text_color),
-                    style = TextStyle(lineHeight = 25.sp)
-                )
+                // Convert fitur string to list and display with bullets
+                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    paket.fitur
+                        .replace("\"", "")
+                        .split(",")
+                        .map { it.trim() }
+                        .forEach { fitur ->
+                            Text(
+                                text = "• $fitur",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = CustomFontFamily,
+                                color = colorResource(id = R.color.text_color),
+                                style = TextStyle(lineHeight = 25.sp)
+                            )
+                        }
+                }
 
                 Text(
-                    modifier = Modifier.padding(20.dp, 20.dp, 0.dp),
+                    modifier = Modifier.padding(20.dp, 20.dp, 20.dp, 10.dp),
                     text = "Detail Paket",
                     fontSize = 16.sp,
                     fontFamily = CustomFontFamily,
@@ -209,7 +267,7 @@ private fun DetailPaketContent(
                 )
 
                 Text(
-                    text = paket.detail,
+                    text = paket.detail.replace("\"", ""),
                     modifier = Modifier.padding(horizontal = 20.dp),
                     fontSize = 14.sp,
                     style = TextStyle(
@@ -218,9 +276,10 @@ private fun DetailPaketContent(
                     ),
                     fontFamily = CustomFontFamily,
                     color = colorResource(id = R.color.text_color),
-
                 )
+
                 Spacer(modifier = Modifier.size(20.dp))
+
                 ButtonComponent(
                     text = "Beli Sekarang",
                     onClick = { onItemClicked(paket.id) },
@@ -259,16 +318,4 @@ private fun CategoryItem(
             fontFamily = CustomFontFamily
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailPaketPreview(){
-    DetailPaketContent(
-        paket = DummyData.paket[0],
-        onBackClick = {},
-        onItemClicked = { paketId ->
-            println("Paket Id : $paketId")
-        }
-    )
 }

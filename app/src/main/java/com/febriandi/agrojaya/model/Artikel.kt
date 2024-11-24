@@ -1,10 +1,11 @@
 package com.febriandi.agrojaya.model
 
-data class Artikel(
+data class ArtikelResponse(
     val id: Int,
     val judul: String,
     val penulis: String,
+    val tanggal: String,
     val isi: String,
-    val photo : Int,
+    val photo : String,
     val like: Int,
 )

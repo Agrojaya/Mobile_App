@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,21 +18,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.component.ArtikelItem
+import com.febriandi.agrojaya.screens.artikel.ArtikelItem
 import com.febriandi.agrojaya.component.CarouselCard
 import com.febriandi.agrojaya.data.DummyData
-import com.febriandi.agrojaya.model.Artikel
+import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,8 +40,9 @@ fun HomeScreen(
     navController: NavController,
     rootNavController: NavController,
     modifier: Modifier = Modifier,
-    artikels: List<Artikel> = DummyData.artikel,
+    context: Context = LocalContext.current,
 ) {
+    val currentUser = FirebaseAuth.getInstance().currentUser?.email?.substringBefore("@") ?: "N/A"
     var search by remember { mutableStateOf("") }
 
     Column(
@@ -60,7 +62,7 @@ fun HomeScreen(
                     painter = painterResource(id = R.drawable.logo3),
                     contentDescription = "Logo",
                     modifier = Modifier
-                        .width(200.dp)
+                        .width(170.dp)
                         .padding(top = 20.dp)
                         .align(Alignment.TopEnd)
                 )
@@ -91,8 +93,9 @@ fun HomeScreen(
                     )
 
                     Text(
+
                         modifier = Modifier.padding(horizontal = 10.dp),
-                        text = "Hi, Adjie Cahya",
+                        text = "Hi, " + currentUser,
                         fontSize = 14.sp,
                         fontFamily = CustomFontFamily,
                         fontWeight = FontWeight.SemiBold,
@@ -267,18 +270,7 @@ fun HomeScreen(
                 }
             }
 
-            // Artikel Items
-            items(
-                items = artikels.take(3),
-                key = { it.id }
-            ) { artikel ->
-                ArtikelItem(
-                    artikel = artikel,
-                    onItemClicked = {
-                        rootNavController.navigate("detailArtikel/${artikel.id}")
-                    }
-                )
-            }
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.component
+package com.febriandi.agrojaya.screens.artikel
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -6,14 +6,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -25,24 +27,26 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.Artikel
+import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.ui.theme.AgroJayaTheme
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 @Composable
 fun ArtikelItem(
-    artikel: Artikel,
+    artikel: ArtikelResponse,
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit
 ) {
+    var isLoading by remember { mutableStateOf(true) }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(170.dp)
             .padding(horizontal = 20.dp, vertical = 10.dp)
-            .clickable {
-                onItemClicked(artikel.id) },
+            .clickable { onItemClicked(artikel.id) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.green_50))
@@ -54,16 +58,32 @@ fun ArtikelItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Article Image
-            Image(
-                painter = painterResource(id = artikel.photo),
-                contentDescription = "Article thumbnail",
+            Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+                    .clip(RoundedCornerShape(8.dp))
+            ) {
+                AsyncImage(
+                    model = artikel.photo,
+                    contentDescription = "Article thumbnail",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    onLoading = { isLoading = true },
+                    onSuccess = { isLoading = false }
+                )
 
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = colorResource(id = R.color.green_400)
+                        )
+                    }
+                }
+            }
             // Article Content
             Column(
                 modifier = Modifier
@@ -94,23 +114,26 @@ fun ArtikelItem(
                         textAlign = Justify
                     )
                 )
-                Row (
+
+                Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 5.dp)
                 ) {
-                    Text(
-                        text = artikel.penulis,
-                        fontSize = 12.sp,
-                        color = colorResource(id = R.color.text_color),
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = CustomFontFamily
-                    )
-                    Row (
+                    Column {
+                        Text(
+                            text = artikel.penulis,
+                            fontSize = 12.sp,
+                            color = colorResource(id = R.color.text_color),
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = CustomFontFamily
+                        )
+                    }
+                    Row(
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.icon_like),
                             contentDescription = "like",
@@ -119,7 +142,6 @@ fun ArtikelItem(
                                 .width(50.dp)
                                 .padding(start = 25.dp)
                         )
-
 
                         Text(
                             text = artikel.like.toString(),
@@ -130,28 +152,10 @@ fun ArtikelItem(
                         )
                     }
                 }
-
             }
         }
     }
+
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ArtikelItemPreview() {
-    AgroJayaTheme {
-        ArtikelItem(
-            artikel = Artikel(
-                1,
-                "Urban Farming",
-                "Febriandi",
-                "Urban farming, atau pertanian perkotaan, adalah praktik bercocok tanam di dalam atau di sekitar lingkungan perkotaan. Ini melibatkan penanaman Urban farming, atau pertanian perkotaan, adalah praktik bercocok tanam di dalam atau di sekitar lingkungan perkotaan. Ini melibatkan penanaman",
-                R.drawable.artikel3,
-                189
-            ),
-            onItemClicked = { artikelId ->
-                println("Artikel Id : $artikelId")
-            }
-        )
-    }
-}
+

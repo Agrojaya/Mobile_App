@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -16,7 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,16 +31,37 @@ import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 @Composable
 fun ProfileScreen() {
+
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(20.dp)
+            .padding(horizontal = 20.dp)
+            .verticalScroll(scrollState)
     ) {
+        // Logo
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo3),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .width(170.dp)
+                    .padding(top = 20.dp)
+                    .align(Alignment.TopEnd)
+            )
+        }
+
         // Profile Header
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -57,14 +82,14 @@ fun ProfileScreen() {
 
             Text(
                 text = "Adjie Cahya Ramadhan",
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 fontFamily = CustomFontFamily,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "adjiecahya05@gmail.com",
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontFamily = CustomFontFamily,
                 color = Color.Gray
             )
@@ -74,26 +99,37 @@ fun ProfileScreen() {
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4CAF50)
+                    containerColor = colorResource(id = R.color.green_400)
                 ),
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.width(120.dp)
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.width(150.dp)
             ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_edit),
+                    contentDescription = "Google Icon",
+                    modifier = Modifier.size(20.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Edit Profil",
-                    color = Color.White,
-                    fontFamily = CustomFontFamily
+                    text = "Edit Profile",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.white)
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
 
         // Menu Items
         MenuButton(
             icon = R.drawable.icon_box,
             text = "Pesanan Saya",
-            backgroundColor = Color(0xFFE8F5E9)
+            backgroundColor = Color(0xFFE8F5E9),
+            modifier = Modifier
+                .height(200.dp),
+            onClick = {
+
+            }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -102,7 +138,10 @@ fun ProfileScreen() {
             icon = R.drawable.icon_lokasi,
             text = "Alamat Pengguna",
             subtitle = "Atur alamat pemasangan urban farming",
-            backgroundColor = Color(0xFFE8F5E9)
+            backgroundColor = Color(0xFFE8F5E9),
+            onClick = {
+
+            }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -119,30 +158,47 @@ fun ProfileScreen() {
         MenuButton(
             icon = R.drawable.icon_gembok,
             text = "Keamanan Akun",
-            subtitle = "Ubah kata sandi"
+            subtitle = "Ubah kata sandi",
+            onClick = {
+
+            }
         )
 
         MenuButton(
             icon = R.drawable.icon_text,
-            text = "Syarat dan Ketentuan"
+            text = "Syarat dan Ketentuan",
+            onClick = {
+
+            }
         )
 
         MenuButton(
             icon = R.drawable.icon_privasi,
-            text = "Kebijakan Privasi"
+            text = "Kebijakan Privasi",
+            onClick = {
+
+            }
+
         )
 
         MenuButton(
             icon = R.drawable.icon_telepon,
-            text = "Kontak Kami"
+            text = "Kontak Kami",
+            onClick = {
+
+            }
         )
 
         MenuButton(
             icon = R.drawable.icon_keluar,
-            text = "Keluar Akun"
+            text = "Keluar Akun",
+            onClick = {
+
+            }
         )
     }
 }
+
 
 @Composable
 fun MenuButton(
@@ -150,14 +206,19 @@ fun MenuButton(
     text: String,
     subtitle: String? = null,
     backgroundColor: Color = Color.Transparent,
-    textColor: Color = Color.Black
+    textColor: Color = colorResource(id = R.color.text_color),
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+
 ) {
-    Box(
+    Column (
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundColor)
             .padding(12.dp)
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -166,7 +227,7 @@ fun MenuButton(
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                tint = if (textColor == Color.Red) textColor else Color(0xFF4CAF50),
+                tint = colorResource(id = R.color.green_400),
                 modifier = Modifier.size(24.dp)
             )
 
@@ -176,7 +237,7 @@ fun MenuButton(
                 Text(
                     text = text,
                     color = textColor,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontFamily = CustomFontFamily,
                     fontWeight = FontWeight.Medium
                 )

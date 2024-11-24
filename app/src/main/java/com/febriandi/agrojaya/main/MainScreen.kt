@@ -1,10 +1,8 @@
-package com.febriandi.agrojaya.component
+package com.febriandi.agrojaya.main
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,7 +10,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,19 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.screens.ArtikelScreen
-import com.febriandi.agrojaya.screens.DetailArtikelScreen
-import com.febriandi.agrojaya.screens.DetailPaketScreen
+import com.febriandi.agrojaya.model.NavItem
 import com.febriandi.agrojaya.screens.HomeScreen
-import com.febriandi.agrojaya.screens.NotifikasiScreen
-import com.febriandi.agrojaya.screens.PaketScreen
-import com.febriandi.agrojaya.screens.PembelianScreen
+import com.febriandi.agrojaya.screens.Paket.PaketScreen
 import com.febriandi.agrojaya.screens.ProfileScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 

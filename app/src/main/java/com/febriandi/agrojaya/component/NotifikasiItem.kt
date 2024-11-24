@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.Artikel
+import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.model.Notifikasi
 import com.febriandi.agrojaya.ui.theme.AgroJayaTheme
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily

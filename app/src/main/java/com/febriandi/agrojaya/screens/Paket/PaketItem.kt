@@ -1,37 +1,22 @@
-package com.febriandi.agrojaya.component
+package com.febriandi.agrojaya.screens.Paket
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -41,18 +26,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.Paket
-import com.febriandi.agrojaya.ui.theme.AgroJayaTheme
+import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
-
 
 @Composable
 fun PaketItem(
-    paket: Paket,
+    paket: PaketResponse,
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit
 ) {
+
+    var isLoading by remember { mutableStateOf(true) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,14 +51,29 @@ fun PaketItem(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             // Background Image
-            Image(
-                painter = painterResource(id = paket.photo),
+            AsyncImage(
+                model = paket.photo,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                onLoading = { isLoading = true },
+                onSuccess = { isLoading = false },
+                onError = { isLoading = false }
             )
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = colorResource(id = R.color.green_400)
+                    )
+                }
+            }
 
             // Semi-transparent overlay for better text readability
             Box(
@@ -84,15 +86,12 @@ fun PaketItem(
                         color = colorResource(id = R.color.natural_900).copy(alpha = 0.3f),
                         shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
                     )
-
                     .border(
                         width = 0.5.dp,
                         color = Color.White.copy(alpha = 0.2f),
                         shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
                     )
-            ) {
-
-            }
+            ) {}
 
             // Content Column
             Column(
@@ -102,8 +101,6 @@ fun PaketItem(
                     .align(Alignment.BottomEnd),
                 verticalArrangement = Arrangement.Bottom
             ) {
-
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -121,7 +118,7 @@ fun PaketItem(
                             ),
                         )
                         Text(
-                            text = paket.harga,
+                            text = "Rp ${String.format("%,d", paket.harga).replace(',', '.')}",
                             fontSize = 14.sp,
                             fontFamily = CustomFontFamily,
                             color = Color.White,
@@ -131,7 +128,6 @@ fun PaketItem(
                                 textAlign = TextAlign.Justify
                             ),
                         )
-
                     }
 
                     Button(
@@ -146,8 +142,8 @@ fun PaketItem(
                             .height(40.dp)
                     ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically, // Mengatur agar teks dan gambar sejajar vertikal
-                            horizontalArrangement = Arrangement.Center, // Agar teks dan gambar terletak di tengah horizontal
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Text(
@@ -166,29 +162,10 @@ fun PaketItem(
                             )
                         }
                     }
-
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private  fun PaketItemPreview(){
-    AgroJayaTheme {
-        PaketItem(
-            paket = Paket(
-                1,
-                "Paket Menengah",
-                "Rp 1.000.000",
-                "Tes",
-                "ksksk",
-                R.drawable.paket3
-            ),
-            onItemClicked = { paketId ->
-                println("Paket Id : $paketId")
-            }
-        )
-    }
-}
+

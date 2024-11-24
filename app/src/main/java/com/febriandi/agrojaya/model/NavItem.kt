@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.component
+package com.febriandi.agrojaya.model
 
 data class NavItem(
     val label: String,

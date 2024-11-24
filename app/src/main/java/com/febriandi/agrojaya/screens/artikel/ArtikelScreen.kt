@@ -1,16 +1,11 @@
-package com.febriandi.agrojaya.screens
+package com.febriandi.agrojaya.screens.artikel
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,27 +14,25 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.component.ArtikelItem
 import com.febriandi.agrojaya.component.ButtonBack
-import com.febriandi.agrojaya.data.DummyData
-import com.febriandi.agrojaya.data.DummyData.artikel
-import com.febriandi.agrojaya.model.Artikel
+import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+import com.febriandi.agrojaya.utils.Resource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtikelScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    artikels: List<Artikel> = DummyData.artikel,
+    viewModel: ArtikelViewModel = hiltViewModel()
 ) {
-    var search by remember { mutableStateOf("") }
+    val artikelState by viewModel.artikelState.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -81,8 +74,11 @@ fun ArtikelScreen(
             )
 
             OutlinedTextField(
-                value = search,
-                onValueChange = { search = it },
+                value = searchQuery,
+                onValueChange = { newQuery ->
+                    searchQuery = newQuery
+                    viewModel.searchArtikels(newQuery)
+                },
                 label = null,
                 placeholder = {
                     Text(
@@ -110,36 +106,78 @@ fun ArtikelScreen(
                     .padding(vertical = 4.dp, horizontal = 20.dp)
                     .height(50.dp),
                 trailingIcon = {
-                    IconButton(onClick = { /* Handle search action */ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_search),
-                            contentDescription = "Pencarian",
-                            tint = colorResource(id = R.color.text_color),
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_search),
+                        contentDescription = "Pencarian",
+                        tint = colorResource(id = R.color.text_color),
+                        modifier = Modifier.size(30.dp)
+                    )
                 }
             )
         }
 
-        // Articles list
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            items(
-                artikels, key = { it.id }) {
-                ArtikelItem(artikel = it) { artikelId ->
-                    navController.navigate("detailArtikel/$artikelId")
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (val currentState = artikelState) {
+                is Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = colorResource(id = R.color.green_500)
+                    )
+                }
+                is Resource.Success<List<ArtikelResponse>> -> {
+                    val artikels = currentState.data
+                    if (artikels.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(
+                                items = artikels,
+                                key = { it.id }
+                            ) { artikel ->
+                                ArtikelItem(
+                                    artikel = artikel,
+                                    onItemClicked = { artikelId ->
+                                        navController.navigate("detailArtikel/$artikelId")
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "Tidak ada artikel",
+                            modifier = Modifier.align(Alignment.Center),
+                            fontFamily = CustomFontFamily
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = currentState.message,
+                            color = Color.Red,
+                            fontFamily = CustomFontFamily
+                        )
+                        Button(
+                            onClick = { viewModel.loadArtikels() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.green_500)
+                            )
+                        ) {
+                            Text(
+                                text = "Coba Lagi",
+                                fontFamily = CustomFontFamily,
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ArtikelScreenPreview() {
-    val navController = rememberNavController()
-    ArtikelScreen(navController = navController)
 }
