@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -91,13 +92,16 @@ fun LoginScreen(
                 ) },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = colorResource(id = R.color.fill_form), // Background color
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = colorResource(id = R.color.green_100),
+                unfocusedBorderColor = colorResource(id = R.color.stroke_form),
                 focusedTextColor = colorResource(id = R.color.text_color),
+                unfocusedTextColor = colorResource(id = R.color.text_color),
                 focusedLabelColor = colorResource(id = R.color.green_500),
-                unfocusedBorderColor = colorResource(id = R.color.stroke_form), // Text color
-                cursorColor = colorResource(id = R.color.text_color) // Cursor color
+                unfocusedLabelColor = colorResource(id = R.color.text_color),
+                cursorColor = colorResource(id = R.color.text_color),
+                unfocusedContainerColor = colorResource(id = R.color.fill_form),
+                focusedContainerColor = colorResource(id = R.color.fill_form)
             ),
             textStyle = TextStyle(
                 fontSize = 14.sp,
@@ -129,13 +133,16 @@ fun LoginScreen(
                 }
             },
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = colorResource(id = R.color.fill_form), // Background color
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = colorResource(id = R.color.green_100),
+                unfocusedBorderColor = colorResource(id = R.color.stroke_form),
                 focusedTextColor = colorResource(id = R.color.text_color),
+                unfocusedTextColor = colorResource(id = R.color.text_color),
                 focusedLabelColor = colorResource(id = R.color.green_500),
-                unfocusedBorderColor = colorResource(id = R.color.stroke_form), // Text color
-                cursorColor = colorResource(id = R.color.text_color) // Cursor color
+                unfocusedLabelColor = colorResource(id = R.color.text_color),
+                cursorColor = colorResource(id = R.color.text_color),
+                unfocusedContainerColor = colorResource(id = R.color.fill_form),
+                focusedContainerColor = colorResource(id = R.color.fill_form)
             ),
             textStyle = TextStyle(
                 fontSize = 14.sp,

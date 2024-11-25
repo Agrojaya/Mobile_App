@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.main
 
+import TambahAlamat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import com.febriandi.agrojaya.screens.NotifikasiScreen
 //import com.febriandi.agrojaya.screens.PembelianScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.TransaksiStatus
+import com.febriandi.agrojaya.screens.alamat.AlamatScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 
 @Composable
@@ -82,6 +84,14 @@ fun AgrojayaApp(
             TransaksiStatus(navController)
         }
 
+        composable("alamat") {
+            AlamatScreen(navController = navController)
+        }
+
+        composable("tambahAlamat") {
+            TambahAlamat(navController = navController)
+        }
+
         composable(
             "detailArtikel/{artikelId}",
             arguments = listOf(
@@ -92,6 +102,7 @@ fun AgrojayaApp(
             )
         ) { backStackEntry ->
             DetailArtikelScreen(
+                rootNavController = navController,
                 navController = navController,
                 artikelId = backStackEntry.arguments?.getInt("artikelId")
             )

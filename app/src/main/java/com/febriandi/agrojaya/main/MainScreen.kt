@@ -17,14 +17,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.NavItem
 import com.febriandi.agrojaya.screens.HomeScreen
 import com.febriandi.agrojaya.screens.Paket.PaketScreen
 import com.febriandi.agrojaya.screens.ProfileScreen
+import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 
@@ -104,7 +107,26 @@ fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) 
                 navController = navController,
                 rootNavController = rootNavController
             ) }
-            composable("profile") { ProfileScreen() }
+            composable("profile") { ProfileScreen(
+                rootNavController = rootNavController,
+                navController = navController
+            ) }
+            composable(
+                "detailArtikel/{artikelId}",
+                arguments = listOf(
+                    navArgument("artikelId") {
+                        type = NavType.IntType
+                        nullable = false
+                    }
+                )
+            ) { backStackEntry ->
+                DetailArtikelScreen(
+                    rootNavController = rootNavController,
+                    navController = navController,
+                    artikelId = backStackEntry.arguments?.getInt("artikelId")
+                )
+            }
+
         }
     }
 }

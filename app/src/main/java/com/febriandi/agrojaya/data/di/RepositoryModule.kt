@@ -1,13 +1,12 @@
 package com.febriandi.agrojaya.data.di
 
-import com.febriandi.agrojaya.data.Repository.ArtikelRepository
-import com.febriandi.agrojaya.data.Repository.ArtikelRepositoryImpl
-import com.febriandi.agrojaya.data.Repository.PaketRepository
-import com.febriandi.agrojaya.data.Repository.PaketRepositoryImpl
-import com.febriandi.agrojaya.data.Repository.UserRepository
-import com.febriandi.agrojaya.data.Repository.UserRepositoryImpl
+import com.febriandi.agrojaya.data.Repository.*
+import com.febriandi.agrojaya.data.remote.ApiService
+import com.febriandi.agrojaya.data.remote.LocationApiService
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -33,4 +32,24 @@ abstract class RepositoryModule {
     abstract fun bindPaketRepository(
         paketRepositoryImpl: PaketRepositoryImpl
     ): PaketRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAlamatRepository(
+        alamatRepositoryImpl: AlamatRepositoryImpl
+    ): AlamatRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object RepositoryProviderModule {
+
+    @Provides
+    @Singleton
+    fun provideLocationRepository(
+        locationApiService: LocationApiService
+    ): LocationRepository {
+        return LocationRepositoryImpl(locationApiService)
+    }
+
 }

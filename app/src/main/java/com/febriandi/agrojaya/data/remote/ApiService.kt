@@ -1,6 +1,9 @@
 package com.febriandi.agrojaya.data.remote
 
+import com.febriandi.agrojaya.model.AlamatRequest
+import com.febriandi.agrojaya.model.AlamatResponse
 import com.febriandi.agrojaya.model.ArtikelResponse
+import com.febriandi.agrojaya.model.BaseResponse
 import com.febriandi.agrojaya.model.GoogleUser
 import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.model.User
@@ -28,4 +31,13 @@ interface ApiService {
 
     @GET("data_paket/{id}")
     suspend fun getPaket(@Path("id") id: Int): PaketResponse
+
+    @POST("alamat")
+    suspend fun simpanAlamat(@Body alamat: AlamatRequest): Response<BaseResponse>
+
+    @GET("data_alamatbyuid/{uid}")
+    suspend fun getAlamatsByUid(@Path("uid") uid: String): List<AlamatResponse>
+
+    @GET("data_alamatbyid/{id}")
+    suspend fun getAlamatById(@Path("id") id: Int): AlamatResponse
 }

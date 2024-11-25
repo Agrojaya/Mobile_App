@@ -31,6 +31,9 @@ class LoginViewModel @Inject constructor(
     private val _stateGoogle = mutableStateOf(LoginGoogleState())
     val stateGoogle: State<LoginGoogleState> = _stateGoogle
 
+    private val _isSignOutSuccessful = mutableStateOf(false)
+    val isSignOutSuccessful: State<Boolean> = _isSignOutSuccessful
+
     // Status login dari DataStore
     val isUserLoggedIn: StateFlow<Boolean> = repository.isUserLoggedIn()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
@@ -129,9 +132,18 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun signOut() {
+    fun signOut(onSignOutComplete: () -> Unit) {
         viewModelScope.launch {
-            repository.signOut() // Ini akan menghapus status login di DataStore
+            try {
+                repository.signOut()
+                repository.saveLoginState(false) // Pastikan status login di-reset setelah logout berhasil
+                _isSignOutSuccessful.value = true
+                onSignOutComplete() // Navigasi setelah logout
+            } catch (e: Exception) {
+                _isSignOutSuccessful.value = false
+                _state.send(LoginState(error = "Sign out failed: ${e.message}"))
+            }
         }
     }
+
 }

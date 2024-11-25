@@ -283,7 +283,10 @@ private fun DetailPaketContent(
                 ButtonComponent(
                     text = "Beli Sekarang",
                     onClick = { onItemClicked(paket.id) },
+
                 )
+
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
     }

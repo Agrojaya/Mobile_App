@@ -44,7 +44,7 @@ fun ButtonComponent(
         modifier = Modifier
             .height(42.dp)
             .fillMaxWidth()
-            .padding(horizontal = 30.dp)
+            .padding(horizontal = 20.dp)
     )
     {
         Text(
@@ -58,10 +58,7 @@ fun ButtonComponent(
         )
 
     }
-    Spacer(
-        modifier = Modifier
-            .size(20.dp)
-    )
+
 }
 
 @Preview(showBackground = true)

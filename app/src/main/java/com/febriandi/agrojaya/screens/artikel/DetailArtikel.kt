@@ -34,6 +34,7 @@ import com.febriandi.agrojaya.utils.Resource
 @Composable
 fun DetailArtikelScreen(
     navController: NavController,
+    rootNavController: NavController,
     modifier: Modifier = Modifier,
     artikelId: Int?,
     viewModel: DetailArtikelViewModel = hiltViewModel()

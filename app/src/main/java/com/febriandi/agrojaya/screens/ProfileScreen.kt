@@ -3,6 +3,7 @@ package com.febriandi.agrojaya.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +15,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,13 +29,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.febriandi.agrojaya.R
+import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navController: NavController,
+    rootNavController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val displayName = currentUser?.email?.substringBefore("@") ?: "N/A"
+    val email = currentUser?.email ?: "N/A"
 
     val scrollState = rememberScrollState()
+
+
 
     Column(
         modifier = Modifier
@@ -81,14 +99,16 @@ fun ProfileScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Adjie Cahya Ramadhan",
+                text = displayName,
                 fontSize = 14.sp,
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.text_color)
+
             )
 
             Text(
-                text = "adjiecahya05@gmail.com",
+                text = email,
                 fontSize = 12.sp,
                 fontFamily = CustomFontFamily,
                 color = Color.Gray
@@ -119,44 +139,111 @@ fun ProfileScreen() {
                 )
             }
         }
-
-        // Menu Items
-        MenuButton(
-            icon = R.drawable.icon_box,
-            text = "Pesanan Saya",
-            backgroundColor = Color(0xFFE8F5E9),
+        Column (
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .height(200.dp),
-            onClick = {
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(colorResource(id = R.color.green_100))
+                .padding(12.dp)
+                .height(50.dp)
+                .clickable {
 
+                }
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.box),
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.green_400),
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column {
+                    Text(
+                        text = "Paket Saya",
+                        color = colorResource(id = R.color.text_color),
+                        fontSize = 14.sp,
+                        fontFamily = CustomFontFamily,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                        Text(
+                            text = "Lihat transaksi anda di sini",
+                            color = Color.Gray,
+                            fontSize = 12.sp,
+                            fontFamily = CustomFontFamily
+                        )
+
+                }
             }
-        )
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        MenuButton(
-            icon = R.drawable.icon_lokasi,
-            text = "Alamat Pengguna",
-            subtitle = "Atur alamat pemasangan urban farming",
-            backgroundColor = Color(0xFFE8F5E9),
-            onClick = {
+        Column (
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(colorResource(id = R.color.green_100))
+                .padding(12.dp)
+                .height(50.dp)
+                .clickable {
+                    rootNavController.navigate("alamat")
+                }
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.loc),
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.green_400),
+                    modifier = Modifier.size(24.dp)
+                )
 
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column {
+                    Text(
+                        text = "Alamat Pengguna",
+                        color = colorResource(id = R.color.text_color),
+                        fontSize = 14.sp,
+                        fontFamily = CustomFontFamily,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Text(
+                        text = "Atur alamat pemasangan urban farming",
+                        color = Color.Gray,
+                        fontSize = 12.sp,
+                        fontFamily = CustomFontFamily
+                    )
+
+                }
             }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
+        }
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = "Pengaturan Akun",
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            fontFamily = CustomFontFamily
+            fontFamily = CustomFontFamily,
+            color = colorResource(id = R.color.text_color)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         MenuButton(
-            icon = R.drawable.icon_gembok,
+            icon = R.drawable.lock,
             text = "Keamanan Akun",
             subtitle = "Ubah kata sandi",
             onClick = {
@@ -165,7 +252,7 @@ fun ProfileScreen() {
         )
 
         MenuButton(
-            icon = R.drawable.icon_text,
+            icon = R.drawable.doc,
             text = "Syarat dan Ketentuan",
             onClick = {
 
@@ -173,7 +260,7 @@ fun ProfileScreen() {
         )
 
         MenuButton(
-            icon = R.drawable.icon_privasi,
+            icon = R.drawable.privacy,
             text = "Kebijakan Privasi",
             onClick = {
 
@@ -182,7 +269,7 @@ fun ProfileScreen() {
         )
 
         MenuButton(
-            icon = R.drawable.icon_telepon,
+            icon = R.drawable.call,
             text = "Kontak Kami",
             onClick = {
 
@@ -190,12 +277,19 @@ fun ProfileScreen() {
         )
 
         MenuButton(
-            icon = R.drawable.icon_keluar,
+            icon = R.drawable.logout,
             text = "Keluar Akun",
             onClick = {
-
+                viewModel.signOut {
+                    rootNavController.navigate("onboarding") {
+                        popUpTo(rootNavController.graph.startDestinationId) { inclusive = true }
+                    }
+                }
             }
         )
+
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -207,8 +301,7 @@ fun MenuButton(
     subtitle: String? = null,
     backgroundColor: Color = Color.Transparent,
     textColor: Color = colorResource(id = R.color.text_color),
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit
 
 ) {
     Column (
@@ -217,7 +310,9 @@ fun MenuButton(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundColor)
-            .padding(12.dp)
+            .padding(6.dp)
+            .height(40.dp)
+            .clickable(onClick = onClick)
 
     ) {
         Row(
@@ -254,8 +349,3 @@ fun MenuButton(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    ProfileScreen()
-}

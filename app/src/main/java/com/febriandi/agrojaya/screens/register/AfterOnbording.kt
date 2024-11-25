@@ -102,7 +102,7 @@ fun AfterOnboarding(
                 navController.navigate("login")
             }
         )
-
+        Spacer(modifier = Modifier.size(20.dp))
         ButtonComponent(
             text = "Daftar Akun",
             onClick = {
