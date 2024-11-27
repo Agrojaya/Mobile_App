@@ -6,6 +6,8 @@ import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.model.BaseResponse
 import com.febriandi.agrojaya.model.GoogleUser
 import com.febriandi.agrojaya.model.PaketResponse
+import com.febriandi.agrojaya.model.PaymentResponse
+import com.febriandi.agrojaya.model.TransaksiRequest
 import com.febriandi.agrojaya.model.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -40,4 +42,8 @@ interface ApiService {
 
     @GET("data_alamatbyid/{id}")
     suspend fun getAlamatById(@Path("id") id: Int): AlamatResponse
+
+    @POST("transaksi")
+    suspend fun createTransaksi(@Body transaksi: TransaksiRequest): Response<PaymentResponse>
+
 }

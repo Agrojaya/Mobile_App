@@ -1,5 +1,6 @@
-package com.febriandi.agrojaya.data.Repository
+package com.febriandi.agrojaya.data.RepositoryImpl
 
+import com.febriandi.agrojaya.data.Repository.AlamatRepository
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.model.AlamatRequest
 import com.febriandi.agrojaya.model.AlamatResponse

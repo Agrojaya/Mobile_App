@@ -1,9 +1,13 @@
 package com.febriandi.agrojaya.data.di
 
+import com.febriandi.agrojaya.data.RepositoryImpl.AlamatRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.ArtikelRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.LocationRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.PaketRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.UserRepositoryImpl
 import com.febriandi.agrojaya.data.Repository.*
-import com.febriandi.agrojaya.data.remote.ApiService
+import com.febriandi.agrojaya.data.RepositoryImpl.TransaksiRepositoryImpl
 import com.febriandi.agrojaya.data.remote.LocationApiService
-import com.google.firebase.auth.FirebaseAuth
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -38,6 +42,12 @@ abstract class RepositoryModule {
     abstract fun bindAlamatRepository(
         alamatRepositoryImpl: AlamatRepositoryImpl
     ): AlamatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTransaksiRepository(
+        transaksiRepositoryImpl: TransaksiRepositoryImpl
+    ): TransaksiRepository
 }
 
 @Module

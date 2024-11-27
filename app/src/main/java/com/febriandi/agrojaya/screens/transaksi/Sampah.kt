@@ -1,37 +1,40 @@
 //package com.febriandi.agrojaya.screens
 //
+//import android.widget.Toast
 //import androidx.compose.foundation.Image
 //import androidx.compose.foundation.background
-//import androidx.compose.foundation.border
-//import androidx.compose.foundation.clickable
 //import androidx.compose.foundation.layout.Arrangement
 //import androidx.compose.foundation.layout.Box
 //import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.IntrinsicSize
 //import androidx.compose.foundation.layout.PaddingValues
 //import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.Spacer
 //import androidx.compose.foundation.layout.fillMaxSize
 //import androidx.compose.foundation.layout.fillMaxWidth
 //import androidx.compose.foundation.layout.height
 //import androidx.compose.foundation.layout.padding
 //import androidx.compose.foundation.layout.size
 //import androidx.compose.foundation.layout.width
+//import androidx.compose.foundation.lazy.LazyRow
 //import androidx.compose.foundation.lazy.grid.GridCells
 //import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 //import androidx.compose.foundation.lazy.grid.items
+//import androidx.compose.foundation.lazy.items
 //import androidx.compose.foundation.rememberScrollState
 //import androidx.compose.foundation.shape.RoundedCornerShape
 //import androidx.compose.material3.Button
 //import androidx.compose.material3.ButtonDefaults
-//import androidx.compose.material3.Card
-//import androidx.compose.material3.CardDefaults
 //import androidx.compose.material3.Checkbox
 //import androidx.compose.material3.CheckboxDefaults
+//import androidx.compose.material3.CircularProgressIndicator
 //import androidx.compose.material3.Text
 //import androidx.compose.runtime.Composable
+//import androidx.compose.runtime.LaunchedEffect
+//import androidx.compose.runtime.collectAsState
+//import androidx.compose.runtime.getValue
 //import androidx.compose.runtime.mutableStateListOf
+//import androidx.compose.runtime.mutableStateOf
 //import androidx.compose.runtime.remember
+//import androidx.compose.runtime.setValue
 //import androidx.compose.ui.Alignment
 //import androidx.compose.ui.Modifier
 //import androidx.compose.ui.draw.clip
@@ -43,57 +46,125 @@
 //import androidx.compose.ui.res.painterResource
 //import androidx.compose.ui.text.TextStyle
 //import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.text.style.TextOverflow
-//import androidx.compose.ui.tooling.preview.Preview
 //import androidx.compose.ui.unit.dp
 //import androidx.compose.ui.unit.sp
-//import androidx.core.app.NotificationCompat.Style
+//import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.navigation.NavController
-//import androidx.navigation.compose.rememberNavController
 //import coil.compose.AsyncImage
 //import coil.request.ImageRequest
 //import com.febriandi.agrojaya.R
 //import com.febriandi.agrojaya.component.ButtonBack
-//import com.febriandi.agrojaya.data.DummyData
-//import com.febriandi.agrojaya.model.Paket
+//import com.febriandi.agrojaya.model.AlamatResponse
+//import com.febriandi.agrojaya.model.PaketResponse
+//import com.febriandi.agrojaya.screens.Paket.DetailPaketViewModel
+//import com.febriandi.agrojaya.screens.alamat.AlamatViewModel
+//import com.febriandi.agrojaya.screens.transaksi.component.AlamatCard
+//import com.febriandi.agrojaya.screens.transaksi.TransaksiViewModel
 //import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+//import com.febriandi.agrojaya.utils.Resource
 //
 //@Composable
 //fun PembelianScreen(
 //    navController: NavController,
 //    modifier: Modifier = Modifier,
 //    onBackClick: () -> Unit,
-//    paketId: Int?
+//    paketId: Int?,
+//    transaksiViewModel: TransaksiViewModel = hiltViewModel(),
+//    viewModel: DetailPaketViewModel = hiltViewModel(),
+//    alamatViewModel: AlamatViewModel = hiltViewModel()
 //) {
-//    val newPaketList = DummyData.paket.filter { paket ->
-//        paket.id == paketId
+//    val paketState = viewModel.paketState.collectAsState()
+//    val alamatState by alamatViewModel.alamatState.collectAsState()
+//
+//    val alamatAddedFlag = navController.currentBackStackEntry
+//        ?.savedStateHandle
+//        ?.get<Boolean>("alamat_added") ?: false
+//
+//    LaunchedEffect(paketId) {
+//        paketId?.let { viewModel.loadPaket(it) }
+//        alamatViewModel.loadAlamat()
 //    }
 //
-//    if (newPaketList.isNotEmpty()) {
-//        PembelianContent(
-//            paket = newPaketList[0],
-//            navController = navController,  // Pass navController to content
-//            onBackClick = {
-//                navController.navigateUp()
+//    LaunchedEffect(alamatAddedFlag) {
+//        if (alamatAddedFlag) {
+//            alamatViewModel.loadAlamat()
+//            // Reset flag
+//            navController.currentBackStackEntry
+//                ?.savedStateHandle
+//                ?.set("alamat_added", false)
+//        }
+//    }
+//
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        when (val state = paketState.value) {
+//            is Resource.Loading -> {
+//                Box(
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    CircularProgressIndicator(
+//                        color = colorResource(id = R.color.green_500)
+//                    )
+//                }
 //            }
-//        )
+//            is Resource.Success -> {
+//                PembelianContent(
+//                    paket = state.data,
+//                    alamatState = alamatState,
+//                    onBackClick = {
+//                        navController.navigateUp()
+//                    },
+//                    navController = navController
+//                )
+//            }
+//            is Resource.Error -> {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(16.dp),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.Center
+//                ) {
+//                    Text(
+//                        text = state.message ?: "Terjadi kesalahan",
+//                        color = Color.Red,
+//                        fontFamily = CustomFontFamily
+//                    )
+//                    Button(
+//                        onClick = { paketId?.let { viewModel.loadPaket(it) } },
+//                        colors = ButtonDefaults.buttonColors(
+//                            containerColor = colorResource(id = R.color.green_500)
+//                        )
+//                    ) {
+//                        Text(
+//                            text = "Coba Lagi",
+//                            fontFamily = CustomFontFamily,
+//                            color = Color.White
+//                        )
+//                    }
+//                }
+//            }
+//        }
 //    }
 //}
 //@Composable
 //private fun PembelianContent(
-//    paket: Paket,
+//    paket: PaketResponse,
+//    alamatState: Resource<List<AlamatResponse>>,
 //    onBackClick: () -> Unit,
 //    modifier: Modifier = Modifier,
 //    navController: NavController
 //) {
 //    val scrollState = rememberScrollState()
-//    val categories = listOf(
-//        "Cabai", "Bayam", "Kangkung", "Selada", "Tomat",
-//        "Pak Choi", "Kailan", "Sawi", "Basil", "Mint"
-//    )
+//    val categories = paket.variasi_bibit
+//        .replace("\"", "")
+//        .split(",")
+//        .map { it.trim() }
 //
 //
 //    val selectedCategories = remember { mutableStateListOf<String>() }
+//    var selectedAlamat by remember { mutableStateOf<AlamatResponse?>(null) }
+//
 //
 //    Box(
 //        modifier = Modifier.fillMaxSize()
@@ -107,7 +178,7 @@
 //                verticalAlignment = Alignment.CenterVertically,
 //                modifier = Modifier
 //                    .fillMaxWidth()
-//                    .padding(vertical = 20.dp, horizontal = 20.dp)
+//                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
 //            ) {
 //                ButtonBack(onClick = onBackClick)
 //                Text(
@@ -124,10 +195,10 @@
 //                verticalAlignment = Alignment.CenterVertically,
 //                modifier = Modifier
 //                    .fillMaxWidth()
-//                    .padding(vertical = 20.dp, horizontal = 20.dp)
+//                    .padding(vertical = 10.dp, horizontal = 20.dp)
 //            ) {
 //                Image(
-//                    painter = painterResource(id = R.drawable.icon_lokasi),
+//                    painter = painterResource(id = R.drawable.loc),
 //                    contentDescription = "Icon",
 //                    modifier = Modifier.size(25.dp),
 //                    colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
@@ -141,90 +212,62 @@
 //                    color = colorResource(id = R.color.text_color)
 //                )
 //            }
-//            Row (
-//                modifier = Modifier.padding(horizontal = 20.dp)
-//            ) {
-//                Card(modifier = Modifier
-//                    .width(260.dp)
-//                    .height(120.dp),
-//                    shape = RoundedCornerShape(10.dp),
-//                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-//                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.green_50))
-//                ){
-//                    Row (
-//                        modifier= Modifier
-//                            .padding(10.dp)
-//                            .fillMaxWidth(),
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.SpaceBetween
-//                    ){
-//                        Text(
-//                            text = "Alamat :",
-//                            fontSize = 12.sp,
-//                            fontFamily = CustomFontFamily,
-//                            fontWeight = FontWeight.SemiBold,
-//                            color = colorResource(id = R.color.text_color)
-//                        )
-//                        Image(
-//                            painter = painterResource(id = R.drawable.icon_edit),
-//                            contentDescription = "Icon",
-//                            modifier = Modifier
-//                                .size(20.dp)
-//                                .clickable {
-//
-//                                },
-//                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color)),
+//            when (alamatState) {
+//                is Resource.Loading -> {
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(100.dp),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        CircularProgressIndicator(
+//                            color = colorResource(id = R.color.green_500)
 //                        )
 //                    }
-//                    Text(
-//                        modifier = Modifier.padding(horizontal = 10.dp),
-//                        text = "Jalan Pemuda no. 19 rumah warna kuning",
-//                        fontSize = 12.sp,
-//                        maxLines = 2,
-//                        style = TextStyle(
-//                            lineHeight = 17.sp
-//                        ),
-//                        overflow = TextOverflow.Ellipsis,
-//                        fontFamily = CustomFontFamily,
-//                        fontWeight = FontWeight.Medium,
-//                        color = colorResource(id = R.color.text_color)
-//                    )
-//                    Text(
-//                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
-//                        text =  "Kontak :  +6241234569333",
-//                        fontSize = 12.sp,
-//                        maxLines = 2,
-//                        style = TextStyle(
-//                            lineHeight = 25.sp
-//                        ),
-//                        overflow = TextOverflow.Ellipsis,
-//                        fontFamily = CustomFontFamily,
-//                        fontWeight = FontWeight.Medium,
-//                        color = colorResource(id = R.color.text_color)
-//                    )
 //                }
-//                Spacer(modifier = Modifier.width(20.dp))
-//                Card(modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(120.dp),
-//                    shape = RoundedCornerShape(10.dp),
-//                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-//                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.green_50))
-//                ){
-//                    Column (
-//                        verticalArrangement = Arrangement.Center,
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                        modifier = Modifier.fillMaxSize()
-//                    ) {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.icon_tambah),
-//                            contentDescription = "Icon",
+//                is Resource.Success -> {
+//                    val alamats = alamatState.data
+//                    if (alamats.isNotEmpty()) {
+//                        LazyRow(
 //                            modifier = Modifier
-//                                .size(30.dp)
-//                                .clickable {
-//
-//                                },
-//                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color)),
+//                                .fillMaxWidth(),
+//                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                            contentPadding = PaddingValues(horizontal = 16.dp)
+//                        ) {
+//                            items(
+//                                items = alamats,
+//                                key = { it.id }
+//                            ) { alamat ->
+//                                AlamatCard(
+//                                    alamat = alamat,
+//                                    isSelected = selectedAlamat?.id == alamat.id,
+//                                    onSelect = { selectedAlamat = it }
+//                                )
+//                            }
+//                        }
+//                    } else {
+//                        Box(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            Text(
+//                                text = "Tidak ada Alamat tersedia",
+//                                fontFamily = CustomFontFamily
+//                            )
+//                        }
+//                    }
+//                }
+//                is Resource.Error -> {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(16.dp),
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Text(
+//                            text = alamatState.message ?: "Terjadi kesalahan",
+//                            color = Color.Red,
+//                            fontFamily = CustomFontFamily
 //                        )
 //                    }
 //                }
@@ -254,7 +297,7 @@
 //                    contentDescription = "Foto Paket"
 //                )
 //                Text(
-//                    text = "Harga : " + paket.harga +"\nTotal harga sudah termasuk biaya keseluruhan pemasangan.",
+//                    text = "Harga : Rp ${String.format("%,d", paket.harga).replace(',', '.')} \nTotal harga sudah termasuk biaya keseluruhan pemasangan.",
 //                    modifier = Modifier.padding(start = 20.dp),
 //                    fontSize = 14.sp,
 //                    fontWeight = FontWeight.Medium,
@@ -338,9 +381,8 @@
 //                                ),
 //                                color = colorResource(id = R.color.green_400)
 //                            )
-//
 //                            Text(
-//                                text = paket.harga,
+//                                text = "Rp ${String.format("%,d", paket.harga).replace(',', '.')}",
 //                                fontSize = 18.sp,
 //                                style = TextStyle(
 //                                    lineHeight = 20.sp
@@ -352,7 +394,15 @@
 //                        }
 //                        Button(
 //                            onClick = {
-//                                navController.navigate("transaksi")
+//                                if (selectedAlamat != null && selectedCategories.isNotEmpty()) {
+//                                    transaksiViewModel.createTransaction(
+//                                        paketId = paket.id,
+//                                        namaPaket = paket.nama_paket,
+//                                        alamatId = selectedAlamat!!.id,
+//                                        totalHarga = paket.harga,
+//                                        variasiBibit = selectedCategories.joinToString(",")
+//                                    )
+//                                }
 //                            },
 //                            contentPadding = PaddingValues(0.dp),
 //                            modifier = Modifier
@@ -373,22 +423,41 @@
 //                                modifier = Modifier.padding(vertical = 8.dp)
 //                            )
 //                        }
+//                        val paymentState = transaksiViewModel.paymentState.collectAsState()
+//
+//                        when (val state = paymentState.value) {
+//                            is Resource.Success -> {
+//
+//                                LaunchedEffect(state) {
+//                                    navController.navigate(
+//                                        "payment-webview/${state.data.token.redirect_url}"
+//                                    )
+//                                }
+//                            }
+//
+//                            is Resource.Error -> {
+//                                // Tampilkan pesan error
+//                                Toast.makeText(
+//                                    LocalContext.current,
+//                                    state.message ?: "Terjadi kesalahan",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            }
+//
+//                            is Resource.Loading -> {
+//                                // Tampilkan loading indicator
+//                                CircularProgressIndicator()
+//                            }
+//                        }
+//
 //                    }
+//
 //                }
 //            }
-//
 //        }
 //
 //    }
+//
+//}
 //}
 //
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun PembelianScreenPreview(){
-//    PembelianContent(
-//        paket = DummyData.paket[0],
-//        navController = rememberNavController(),
-//        onBackClick = {}
-//    )
-//}

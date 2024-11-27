@@ -18,11 +18,12 @@ import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.screens.Paket.DetailPaketScreen
 import com.febriandi.agrojaya.screens.login.LoginScreen
 import com.febriandi.agrojaya.screens.NotifikasiScreen
-//import com.febriandi.agrojaya.screens.PembelianScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
+import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
+import com.febriandi.agrojaya.screens.transaksi.PaymentWebViewScreen
 
 @Composable
 fun AgrojayaApp(
@@ -52,22 +53,39 @@ fun AgrojayaApp(
             })
         }
 
-//        composable(
-//            route = "pemesanan/{paketId}",
-//            arguments = listOf(
-//                navArgument("paketId") {
-//                    type = NavType.IntType
-//                    defaultValue = 0
-//                }
-//            )
-//        ) { backStackEntry ->
-//            PembelianScreen(
-//                onBackClick = { navController.navigateUp() },
-//                navController = navController,
-//                paketId = backStackEntry.arguments?.getInt("paketId")
-//            )
-//        }
+        composable(
+            route = "pemesanan/{paketId}",
+            arguments = listOf(
+                navArgument("paketId") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
+            )
+        ) { backStackEntry ->
+            PembelianScreen(
+                onBackClick = { navController.navigateUp() },
+                navController = navController,
+                paketId = backStackEntry.arguments?.getInt("paketId")
+            )
+        }
 
+        composable(
+            route = "payment-webview/{paymentUrl}",
+            arguments = listOf(
+                navArgument("paymentUrl") {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val paymentUrl = backStackEntry.arguments?.getString("paymentUrl")
+            paymentUrl?.let {
+                PaymentWebViewScreen(
+                    navController = navController,
+                    paymentUrl = it
+                )
+            }
+        }
         composable("afterOnboarding") {
             AfterOnboarding(navController)
         }

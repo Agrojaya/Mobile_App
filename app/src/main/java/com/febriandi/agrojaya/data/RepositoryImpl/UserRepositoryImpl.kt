@@ -1,5 +1,6 @@
-package com.febriandi.agrojaya.data.Repository
+package com.febriandi.agrojaya.data.RepositoryImpl
 
+import com.febriandi.agrojaya.data.Repository.UserRepository
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.model.User

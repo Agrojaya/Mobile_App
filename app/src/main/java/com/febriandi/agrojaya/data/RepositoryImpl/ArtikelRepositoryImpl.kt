@@ -1,26 +1,27 @@
-package com.febriandi.agrojaya.data.Repository
+package com.febriandi.agrojaya.data.RepositoryImpl
 
+import com.febriandi.agrojaya.data.Repository.ArtikelRepository
 import com.febriandi.agrojaya.data.remote.ApiService
-import com.febriandi.agrojaya.model.PaketResponse
+import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.utils.Resource
 import javax.inject.Inject
 
-class PaketRepositoryImpl @Inject constructor(
+class ArtikelRepositoryImpl @Inject constructor(
     private val apiService: ApiService
-): PaketRepository {
+): ArtikelRepository {
 
-    override suspend fun getPakets(): Resource<List<PaketResponse>> {
+    override suspend fun getArtikels(): Resource<List<ArtikelResponse>> {
         return try {
-            val response = apiService.getPakets()
+            val response = apiService.getArtikels()
             Resource.Success(response)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
     }
 
-    override suspend fun getPaketById(id: Int): Resource<PaketResponse> {
+    override suspend fun getArtikelById(id: Int): Resource<ArtikelResponse> {
         return try {
-            val response = apiService.getPaket(id)
+            val response = apiService.getArtikel(id)
             Resource.Success(response)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")

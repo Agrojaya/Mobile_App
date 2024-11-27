@@ -1,5 +1,6 @@
-package com.febriandi.agrojaya.data.Repository
+package com.febriandi.agrojaya.data.RepositoryImpl
 
+import com.febriandi.agrojaya.data.Repository.LocationRepository
 import com.febriandi.agrojaya.data.remote.LocationApiService
 import com.febriandi.agrojaya.model.Kabupaten
 import com.febriandi.agrojaya.model.Kecamatan
