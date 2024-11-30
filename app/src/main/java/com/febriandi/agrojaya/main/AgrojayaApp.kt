@@ -19,10 +19,11 @@ import com.febriandi.agrojaya.screens.Paket.DetailPaketScreen
 import com.febriandi.agrojaya.screens.login.LoginScreen
 import com.febriandi.agrojaya.screens.NotifikasiScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
-import com.febriandi.agrojaya.screens.TransaksiStatus
+import com.febriandi.agrojaya.screens.transaksi.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
+import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
 import com.febriandi.agrojaya.screens.transaksi.PaymentWebViewScreen
 
 @Composable
@@ -70,21 +71,25 @@ fun AgrojayaApp(
         }
 
         composable(
-            route = "payment-webview/{paymentUrl}",
+            route = "payment-webview/{paymentUrl}/{orderId}",
             arguments = listOf(
                 navArgument("paymentUrl") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("orderId") {
                     type = NavType.StringType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
-            val paymentUrl = backStackEntry.arguments?.getString("paymentUrl")
-            paymentUrl?.let {
+            val paymentUrl = backStackEntry.arguments?.getString("paymentUrl") ?: ""
+            val orderId = backStackEntry.arguments?.getString("orderId") ?:""
                 PaymentWebViewScreen(
                     navController = navController,
-                    paymentUrl = it
+                    paymentUrl = paymentUrl,
+                    orderId = orderId
                 )
-            }
         }
         composable("afterOnboarding") {
             AfterOnboarding(navController)
@@ -98,12 +103,13 @@ fun AgrojayaApp(
             ArtikelScreen(navController)
         }
 
-        composable("transaksi") {
-            TransaksiStatus(navController)
-        }
 
         composable("alamat") {
             AlamatScreen(navController = navController)
+        }
+
+        composable("daftarTransaksi") {
+            DaftarTransaksiScreen(navController = navController)
         }
 
         composable("tambahAlamat") {
@@ -125,6 +131,23 @@ fun AgrojayaApp(
                 artikelId = backStackEntry.arguments?.getInt("artikelId")
             )
         }
+
+        composable(
+            "transaksi/{orderId}",
+            arguments = listOf(
+                navArgument("orderId") {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            TransaksiStatus(
+                rootNavController = navController,
+                navController = navController,
+                orderId = backStackEntry.arguments?.getString("orderId")
+            )
+        }
+
 
         composable("login") {
             LoginScreen(navController)
