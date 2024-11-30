@@ -32,8 +32,7 @@ import coil.request.ImageRequest
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.AlamatResponse
 import com.febriandi.agrojaya.model.PaketResponse
-import com.febriandi.agrojaya.screens.transaksi.TransaksiViewModel
-import com.febriandi.agrojaya.screens.transaksi.component.AlamatCard
+import com.febriandi.agrojaya.screens.transaksi.viewmodel.TransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
@@ -301,7 +300,7 @@ fun PembelianBottomSection(
                 is Resource.Success -> {
                     LaunchedEffect(state) {
                         navController.navigate(
-                            "payment-webview/${Uri.encode(state.data.token.redirect_url)}"
+                            "payment-webview/${Uri.encode(state.data.data.snap_redirect_url)}/${Uri.decode(state.data.data.order_id)}"
                         )
                     }
                 }

@@ -3,7 +3,10 @@ package com.febriandi.agrojaya.data.RepositoryImpl
 import com.febriandi.agrojaya.data.Repository.TransaksiRepository
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.model.PaymentResponse
+import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.model.TransaksiRequest
+import com.febriandi.agrojaya.model.TransaksiResponse
+import com.febriandi.agrojaya.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,4 +26,30 @@ class TransaksiRepositoryImpl @Inject constructor(
     } catch (e: Exception) {
         Result.failure(e)
     }
+
+    override suspend fun getTransaksisByUid(): List<TransaksiResponse> {
+        val currentUid = firebaseAuth.currentUser?.uid
+            ?: throw IllegalStateException("No user logged in")
+        return transaksiApiService.getTransaksisByUid(currentUid)
+    }
+
+    override suspend fun getTransaksiById(id: Int): Resource<TransaksiResponse> {
+        return try {
+            val response = transaksiApiService.getTransaksiById(id)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
+
+    override suspend fun getStatusTransaksi(order_id: String): Resource<PaymentStatus> {
+        return try {
+            val response =  transaksiApiService.getStatusTransaksi(order_id)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
 }

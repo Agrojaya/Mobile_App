@@ -148,7 +148,7 @@ fun ProfileScreen(
                 .padding(12.dp)
                 .height(50.dp)
                 .clickable {
-
+                    rootNavController.navigate("daftarTransaksi")
                 }
         ) {
             Row(

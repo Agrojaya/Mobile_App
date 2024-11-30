@@ -7,7 +7,9 @@ import com.febriandi.agrojaya.model.BaseResponse
 import com.febriandi.agrojaya.model.GoogleUser
 import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.model.PaymentResponse
+import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.model.TransaksiRequest
+import com.febriandi.agrojaya.model.TransaksiResponse
 import com.febriandi.agrojaya.model.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,28 +24,37 @@ interface ApiService {
     @POST("register")
     suspend fun createGoogleUser(@Body user: GoogleUser): Response<GoogleUser>
 
-    @GET("data_artikel")
+    @GET("artikels")
     suspend fun getArtikels(): List<ArtikelResponse>
 
-    @GET("data_artikel/{id}")
+    @GET("artikel/{id}")
     suspend fun getArtikel(@Path("id") id: Int): ArtikelResponse
 
-    @GET("data_paket")
+    @GET("pakets")
     suspend fun getPakets(): List<PaketResponse>
 
-    @GET("data_paket/{id}")
+    @GET("paket/{id}")
     suspend fun getPaket(@Path("id") id: Int): PaketResponse
 
     @POST("alamat")
     suspend fun simpanAlamat(@Body alamat: AlamatRequest): Response<BaseResponse>
 
-    @GET("data_alamatbyuid/{uid}")
+    @GET("alamat/byuid/{uid}")
     suspend fun getAlamatsByUid(@Path("uid") uid: String): List<AlamatResponse>
 
-    @GET("data_alamatbyid/{id}")
+    @GET("alamat/byid/{id}")
     suspend fun getAlamatById(@Path("id") id: Int): AlamatResponse
 
     @POST("transaksi")
     suspend fun createTransaksi(@Body transaksi: TransaksiRequest): Response<PaymentResponse>
+
+    @GET("transaksi/byuid/{uid}")
+    suspend fun getTransaksisByUid(@Path("uid") uid: String): List<TransaksiResponse>
+
+    @GET("transaksi/byid/{id}")
+    suspend fun getTransaksiById(@Path("id") id: Int): TransaksiResponse
+
+    @GET("transaksi/status/{order_id}")
+    suspend fun getStatusTransaksi(@Path("order_id") order_id: String): PaymentStatus
 
 }

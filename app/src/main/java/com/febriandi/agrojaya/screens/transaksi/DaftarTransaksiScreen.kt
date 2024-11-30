@@ -1,7 +1,15 @@
-package com.febriandi.agrojaya.screens.Paket
+package com.febriandi.agrojaya.screens.transaksi
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -22,39 +30,51 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.PaketResponse
+import com.febriandi.agrojaya.component.ButtonBack
+import com.febriandi.agrojaya.screens.transaksi.component.TransaksiItem
+import com.febriandi.agrojaya.screens.transaksi.viewmodel.DaftarTransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
 @Composable
-fun PaketScreen(
+fun DaftarTransaksiScreen(
+    modifier: Modifier = Modifier,
     navController: NavController,
-    rootNavController: NavController,
-    viewModel: PaketViewModel = hiltViewModel()
-) {
-    val paketState by viewModel.paketState.collectAsState()
+    viewModel: DaftarTransaksiViewModel = hiltViewModel()
+){
+    val transaksiState by viewModel.transaksiState.collectAsState()
 
-    // Add LaunchedEffect to reload data when screen is shown
+
     LaunchedEffect(key1 = Unit) {
-        viewModel.loadPakets()
+        viewModel.loadTransaksis()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
+    Column (
+        modifier = Modifier.fillMaxSize()
             .background(Color.White)
-    ) {
-        Text(
-            modifier = Modifier.padding(20.dp),
-            text = "Daftar Paket",
-            fontSize = 16.sp,
-            fontFamily = CustomFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            color = colorResource(id = R.color.text_color)
-        )
+    ){
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp, horizontal = 20.dp)
+            ) {
+                ButtonBack {
+                    navController.popBackStack()
+                }
+                Text(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    text = "Daftar Transaksi",
+                    fontSize = 14.sp,
+                    fontFamily = CustomFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colorResource(id = R.color.text_color)
+                )
+
+            }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            when (val currentState = paketState) {
+            when (val currentState = transaksiState) {
                 is Resource.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -66,19 +86,19 @@ fun PaketScreen(
                     }
                 }
                 is Resource.Success -> {
-                    val pakets = currentState.data
-                    if (pakets.isNotEmpty()) {
+                    val transaksis = currentState.data
+                    if (transaksis.isNotEmpty()) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             items(
-                                items = pakets,
+                                items = transaksis,
                                 key = { it.id }
-                            ) { paket ->
-                                PaketItem(
-                                    paket = paket,
-                                    onItemClicked = { paketId ->
-                                        rootNavController.navigate("detailPaket/$paketId")
+                            ) { transaksi ->
+                                TransaksiItem(
+                                    transaksi = transaksi,
+                                    onItemClicked = { transaksiId ->
+                                        navController.navigate("detailTransaksi/$transaksiId")
                                     }
                                 )
                             }
@@ -89,7 +109,7 @@ fun PaketScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Tidak ada paket tersedia",
+                                text = "Tidak ada Transaksi",
                                 fontFamily = CustomFontFamily
                             )
                         }
@@ -110,7 +130,7 @@ fun PaketScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(
-                            onClick = { viewModel.loadPakets() },
+                            onClick = { viewModel.loadTransaksis() },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = colorResource(id = R.color.green_500)
                             )
@@ -125,5 +145,8 @@ fun PaketScreen(
                 }
             }
         }
+
+
     }
 }
+

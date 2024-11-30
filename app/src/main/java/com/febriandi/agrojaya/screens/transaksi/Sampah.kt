@@ -59,7 +59,7 @@
 //import com.febriandi.agrojaya.screens.Paket.DetailPaketViewModel
 //import com.febriandi.agrojaya.screens.alamat.AlamatViewModel
 //import com.febriandi.agrojaya.screens.transaksi.component.AlamatCard
-//import com.febriandi.agrojaya.screens.transaksi.TransaksiViewModel
+//import com.febriandi.agrojaya.screens.transaksi.viewmodel.TransaksiViewModel
 //import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 //import com.febriandi.agrojaya.utils.Resource
 //

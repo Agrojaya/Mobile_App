@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.screens.transaksi
+package com.febriandi.agrojaya.screens.transaksi.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
