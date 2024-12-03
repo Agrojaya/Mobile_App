@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -38,29 +39,44 @@ import com.febriandi.agrojaya.utils.Resource
 
 @Composable
 fun PembelianAlamatSection(
+    navController: NavController,
     alamatState: Resource<List<AlamatResponse>>,
     onAlamatSelect: (AlamatResponse?) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 20.dp)
     ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.loc),
+                contentDescription = "Icon",
+                modifier = Modifier.size(25.dp),
+                colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = "Alamat Pengiriman",
+                fontSize = 14.sp,
+                fontFamily = CustomFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                color = colorResource(id = R.color.text_color)
+            )
+
+        }
         Image(
-            painter = painterResource(id = R.drawable.loc),
+            painter = painterResource(id = R.drawable.icon_tambah),
             contentDescription = "Icon",
-            modifier = Modifier.size(25.dp),
-            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+            modifier = Modifier.size(30.dp)
+                .clickable { navController.navigate("tambahAlamat") },
+            colorFilter = ColorFilter.tint(colorResource(id = R.color.green_400))
         )
-        Text(
-            modifier = Modifier.padding(horizontal = 10.dp),
-            text = "Alamat Pengiriman",
-            fontSize = 14.sp,
-            fontFamily = CustomFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            color = colorResource(id = R.color.text_color)
-        )
+
     }
 
     when (alamatState) {
@@ -169,17 +185,30 @@ fun PembelianPaketDetails(paket: PaketResponse) {
 
 @Composable
 fun PembelianVarianBibitSelection(
+    paket: PaketResponse,
     categories: List<String>,
     selectedCategories: MutableList<String>
 ) {
+    val context = LocalContext.current
+
+    // Menentukan batas maksimal pilihan berdasarkan nama paket
+    val maxSelection = when {
+        paket.nama_paket.contains("Dasar", ignoreCase = true) -> 1
+        paket.nama_paket.contains("Menengah", ignoreCase = true) -> 3
+        paket.nama_paket.contains("Lengkap", ignoreCase = true) -> 5
+        paket.nama_paket.contains("Premium", ignoreCase = true) -> 10
+        else -> 1
+    }
+
     Text(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-        text = "Pilih Varian Bibit",
+        text = "Pilih Varian Bibit (Maksimal $maxSelection)",
         fontSize = 14.sp,
         fontFamily = CustomFontFamily,
         fontWeight = FontWeight.SemiBold,
         color = colorResource(id = R.color.text_color)
     )
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -193,7 +222,15 @@ fun PembelianVarianBibitSelection(
                     checked = selectedCategories.contains(category),
                     onCheckedChange = { isChecked ->
                         if (isChecked) {
-                            selectedCategories.add(category)
+                            if (selectedCategories.size < maxSelection) {
+                                selectedCategories.add(category)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Maksimal pemilihan varian untuk paket ini adalah $maxSelection",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         } else {
                             selectedCategories.remove(category)
                         }
@@ -224,10 +261,13 @@ fun PembelianBottomSection(
     navController: NavController,
     transaksiViewModel: TransaksiViewModel
 ) {
+    val context = LocalContext.current
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Center,
+
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
@@ -262,14 +302,23 @@ fun PembelianBottomSection(
                 }
                 Button(
                     onClick = {
-                        if (selectedAlamat != null && selectedCategories.isNotEmpty()) {
-                            transaksiViewModel.createTransaction(
-                                paketId = paket.id,
-                                namaPaket = paket.nama_paket,
-                                alamatId = selectedAlamat.id,
-                                totalHarga = paket.harga,
-                                variasiBibit = selectedCategories.joinToString(",")
-                            )
+                        when {
+                            selectedAlamat == null || selectedCategories.isEmpty() -> {
+                                Toast.makeText(
+                                    context,
+                                    "Silahkan pilih alamat dan varian bibit",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            else -> {
+                                transaksiViewModel.createTransaction(
+                                    paketId = paket.id,
+                                    namaPaket = paket.nama_paket,
+                                    alamatId = selectedAlamat.id,
+                                    totalHarga = paket.harga,
+                                    variasiBibit = selectedCategories.joinToString(",")
+                                )
+                            }
                         }
                     },
                     contentPadding = PaddingValues(0.dp),
@@ -293,7 +342,6 @@ fun PembelianBottomSection(
                 }
             }
 
-            // Payment State Handling
             val paymentState = transaksiViewModel.paymentState.collectAsState()
 
             when (val state = paymentState.value) {
@@ -304,20 +352,17 @@ fun PembelianBottomSection(
                         )
                     }
                 }
-
                 is Resource.Error -> {
                     Toast.makeText(
-                        LocalContext.current,
+                        context,
                         state.message ?: "Terjadi kesalahan",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
                 is Resource.Loading -> {
                     CircularProgressIndicator()
                 }
-
-                else -> {} // No-op for other states
+                else -> {}
             }
         }
     }

@@ -63,9 +63,9 @@ fun DaftarTransaksiScreen(
                     navController.popBackStack()
                 }
                 Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Daftar Transaksi",
-                    fontSize = 14.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = "Pesanan Saya",
+                    fontSize = 16.sp,
                     fontFamily = CustomFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     color = colorResource(id = R.color.text_color)
@@ -97,8 +97,8 @@ fun DaftarTransaksiScreen(
                             ) { transaksi ->
                                 TransaksiItem(
                                     transaksi = transaksi,
-                                    onItemClicked = { transaksiId ->
-                                        navController.navigate("detailTransaksi/$transaksiId")
+                                    onItemClicked = { orderId ->
+                                        navController.navigate("detailTransaksi/$orderId")
                                     }
                                 )
                             }

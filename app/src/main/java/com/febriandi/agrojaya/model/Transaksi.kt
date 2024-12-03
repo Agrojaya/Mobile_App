@@ -43,6 +43,7 @@ data class TransaksiResponse(
 )
 
 data class PaymentStatus(
+    val order_id: String,
     val gross_amount : String,
     val transaction_status: String,
     val settlement_time: String

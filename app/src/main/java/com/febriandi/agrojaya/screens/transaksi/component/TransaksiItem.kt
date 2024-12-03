@@ -44,7 +44,7 @@ import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 fun TransaksiItem(
     transaksi: TransaksiResponse,
     modifier: Modifier = Modifier,
-    onItemClicked: (Int) -> Unit
+    onItemClicked: (String) -> Unit
 ) {
     var isLoading by remember { mutableStateOf(true) }
 
@@ -105,13 +105,6 @@ fun TransaksiItem(
                     maxLines = 1,
                     fontFamily = CustomFontFamily
                 )
-                Text(
-                    text = transaksi.status_transaksi,
-                    fontSize = 12.sp,
-                    color = colorResource(id = R.color.text_color),
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = CustomFontFamily
-                )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = "Status Pembayaran",
@@ -133,7 +126,7 @@ fun TransaksiItem(
                         lineHeight = 10.sp
                     )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -149,7 +142,7 @@ fun TransaksiItem(
                         fontFamily = CustomFontFamily
                     )
                     Button(
-                        onClick = { onItemClicked(transaksi.id) },
+                        onClick = { onItemClicked(transaksi.order_id) },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.green_400)
                         ),

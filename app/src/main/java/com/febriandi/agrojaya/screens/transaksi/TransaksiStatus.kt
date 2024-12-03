@@ -3,6 +3,7 @@ package com.febriandi.agrojaya.screens.transaksi
 import android.icu.text.NumberFormat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,7 +39,10 @@ import com.febriandi.agrojaya.component.ButtonComponent
 import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.screens.transaksi.viewmodel.DetailTransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
+import com.febriandi.agrojaya.utils.Constant.CLIENT
 import com.febriandi.agrojaya.utils.Resource
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -69,6 +76,9 @@ fun TransaksiStatus(
                     payment = state.data,
                     onItemClicked = {
                         navController.navigate("detailTransaksi/$orderId")
+                    },
+                    onItemBack = {
+                        rootNavController.navigate("mainScreen")
                     }
                 )
             }
@@ -106,6 +116,7 @@ fun TransaksiStatus(
 @Composable
 private fun TransaksiStatusContent(
     payment: PaymentStatus,
+    onItemBack: () -> Unit,
     onItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -179,7 +190,7 @@ private fun TransaksiStatusContent(
             )
             Text(
                 text = statusText,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 style = TextStyle(
                     lineHeight = 30.sp
                 ),
@@ -189,7 +200,7 @@ private fun TransaksiStatusContent(
             )
             Text(
                 text = formatCurrency(payment.gross_amount),
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 style = TextStyle(
                     lineHeight = 10.sp
                 ),
@@ -223,12 +234,38 @@ private fun TransaksiStatusContent(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
             )
         }
+        Button(
+            onClick = { onItemBack ()
+               },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Transparent // Transparent background
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .height(34.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .border(
+                    width = 1.dp,
+                    color = colorResource(id = R.color.green_400), // Border color
+                    shape = RoundedCornerShape(8.dp)
+                )
+        ) {
+            Text(
+                text = "Kembali Ke Beranda",
+                fontWeight = FontWeight.Medium,
+                fontFamily = CustomFontFamily,
+                fontSize = 14.sp,
+                color = colorResource(id = R.color.green_400)
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
 
         ButtonComponent(
-            text = "Lihat Detail Transaksi"
-        ) {
+            text = "Lihat Detail Transaksi",
+            onClick = { onItemClicked(payment.order_id)}
+        )
 
-        }
         Spacer(modifier = Modifier.height(24.dp))
     }
 }

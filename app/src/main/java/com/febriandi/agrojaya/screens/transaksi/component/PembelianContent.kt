@@ -105,7 +105,6 @@ private fun PembelianDetailContent(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            // Header
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -123,19 +122,21 @@ private fun PembelianDetailContent(
                 )
             }
 
-            // Alamat Section
-            PembelianAlamatSection(alamatState) { selectedAlamat = it }
+            PembelianAlamatSection(
+                navController = navController,
+                alamatState = alamatState,
+            ){
+                selectedAlamat = it
+            }
 
-            // Paket Details
             PembelianPaketDetails(paket)
 
-            // Varian Bibit Selection
             PembelianVarianBibitSelection(
+                paket = paket,
                 categories = categories,
                 selectedCategories = selectedCategories
             )
 
-            // Bottom Purchase Section
             PembelianBottomSection(
                 paket = paket,
                 selectedAlamat = selectedAlamat,

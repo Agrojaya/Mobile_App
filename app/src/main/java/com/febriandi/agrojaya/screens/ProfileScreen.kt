@@ -166,7 +166,7 @@ fun ProfileScreen(
 
                 Column {
                     Text(
-                        text = "Paket Saya",
+                        text = "Pesanan Saya",
                         color = colorResource(id = R.color.text_color),
                         fontSize = 14.sp,
                         fontFamily = CustomFontFamily,

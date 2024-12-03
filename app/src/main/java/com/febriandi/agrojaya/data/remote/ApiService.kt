@@ -51,8 +51,8 @@ interface ApiService {
     @GET("transaksi/byuid/{uid}")
     suspend fun getTransaksisByUid(@Path("uid") uid: String): List<TransaksiResponse>
 
-    @GET("transaksi/byid/{id}")
-    suspend fun getTransaksiById(@Path("id") id: Int): TransaksiResponse
+    @GET("transaksi/byid/{order_id}")
+    suspend fun getTransaksiById(@Path("order_id") order_id: String): TransaksiResponse
 
     @GET("transaksi/status/{order_id}")
     suspend fun getStatusTransaksi(@Path("order_id") order_id: String): PaymentStatus

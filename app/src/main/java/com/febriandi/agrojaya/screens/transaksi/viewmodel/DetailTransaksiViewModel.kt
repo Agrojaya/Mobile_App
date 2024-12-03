@@ -22,11 +22,11 @@ class DetailTransaksiViewModel @Inject constructor(
     val paymentState: StateFlow<Resource<PaymentStatus>> = _paymentState
 
 
-    fun loadTransaksi(id : Int) {
+    fun loadTransaksi(order_id : String) {
         viewModelScope.launch {
             _transaksiState.value = Resource.Loading
             try {
-                _transaksiState.value = repository.getTransaksiById(id)
+                _transaksiState.value = repository.getTransaksiById(order_id)
             } catch (e: Exception) {
                 _transaksiState.value = Resource.Error(e.message ?: "Terjadi Kesalahan")
             }

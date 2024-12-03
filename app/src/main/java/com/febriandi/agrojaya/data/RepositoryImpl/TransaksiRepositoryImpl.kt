@@ -33,9 +33,9 @@ class TransaksiRepositoryImpl @Inject constructor(
         return transaksiApiService.getTransaksisByUid(currentUid)
     }
 
-    override suspend fun getTransaksiById(id: Int): Resource<TransaksiResponse> {
+    override suspend fun getTransaksiById(order_id: String): Resource<TransaksiResponse> {
         return try {
-            val response = transaksiApiService.getTransaksiById(id)
+            val response = transaksiApiService.getTransaksiById(order_id)
             Resource.Success(response)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")

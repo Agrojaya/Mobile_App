@@ -24,6 +24,7 @@ import com.febriandi.agrojaya.screens.alamat.AlamatScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
+import com.febriandi.agrojaya.screens.transaksi.DetailTransaksi
 import com.febriandi.agrojaya.screens.transaksi.PaymentWebViewScreen
 
 @Composable
@@ -143,6 +144,21 @@ fun AgrojayaApp(
         ) { backStackEntry ->
             TransaksiStatus(
                 rootNavController = navController,
+                navController = navController,
+                orderId = backStackEntry.arguments?.getString("orderId")
+            )
+        }
+
+        composable(
+            "detailTransaksi/{orderId}",
+            arguments = listOf(
+                navArgument("orderId") {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            DetailTransaksi(
                 navController = navController,
                 orderId = backStackEntry.arguments?.getString("orderId")
             )
