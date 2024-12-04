@@ -21,6 +21,8 @@ import com.febriandi.agrojaya.screens.NotifikasiScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.transaksi.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
+import com.febriandi.agrojaya.screens.login.ForgotPasswordScreen
+import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
@@ -110,11 +112,21 @@ fun AgrojayaApp(
         }
 
         composable("daftarTransaksi") {
-            DaftarTransaksiScreen(navController = navController)
+            DaftarTransaksiScreen(
+                navController = navController)
         }
 
         composable("tambahAlamat") {
             TambahAlamat(navController = navController)
+        }
+
+        composable("gantiPassword") {
+            GantiPasswordScreen(navController = navController)
+        }
+
+        composable("lupaPassword") {
+            ForgotPasswordScreen(navController = navController,
+                onResetSuccess = {navController.popBackStack()})
         }
 
         composable(

@@ -161,7 +161,9 @@ fun LoginScreen(
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(top = 8.dp, end = 30.dp)
-                .clickable { /* Handle forgot password click */ }
+                .clickable {
+                    navController.navigate("lupaPassword")
+                }
         )
 
         if (state.value?.loading == true) {

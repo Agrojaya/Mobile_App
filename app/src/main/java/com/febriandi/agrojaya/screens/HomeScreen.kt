@@ -28,10 +28,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
+import com.febriandi.agrojaya.component.PaketCarousel
 import com.febriandi.agrojaya.screens.artikel.ArtikelItem
-import com.febriandi.agrojaya.component.CarouselCard
 import com.febriandi.agrojaya.data.DummyData
 import com.febriandi.agrojaya.model.ArtikelResponse
+import com.febriandi.agrojaya.screens.Paket.PaketViewModel
 import com.febriandi.agrojaya.screens.artikel.ArtikelViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
@@ -44,11 +45,13 @@ fun HomeScreen(
     rootNavController: NavController,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    viewModel: ArtikelViewModel = hiltViewModel()
+    viewModel: ArtikelViewModel = hiltViewModel(),
+    paketViewModel: PaketViewModel = hiltViewModel()
 ) {
     val currentUser = FirebaseAuth.getInstance().currentUser?.email?.substringBefore("@") ?: "N/A"
     var search by remember { mutableStateOf("") }
     val artikelState by viewModel.artikelState.collectAsState()
+    val paketState by paketViewModel.paketState.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -61,7 +64,34 @@ fun HomeScreen(
             ) {
                 // Carousel
                 item {
-                    CarouselCard()
+                    when (paketState) {
+                        is Resource.Loading -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                color = colorResource(id = R.color.green_500)
+                            )
+                        }
+                        is Resource.Success -> {
+                            val paketList = (paketState as Resource.Success).data.take(3)
+                            if (paketList.isNotEmpty()) {
+                                PaketCarousel(
+                                    paketList = paketList,
+                                    onItemClicked = { paketId ->
+                                        rootNavController.navigate("detailPaket/$paketId")
+                                    }
+                                )
+                            }
+                        }
+                        is Resource.Error -> {
+                            Text(
+                                text = "Gagal memuat paket",
+                                color = Color.Red,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
                 }
 
                 // Jadwal Kegiatan

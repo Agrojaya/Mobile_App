@@ -247,7 +247,7 @@ fun ProfileScreen(
             text = "Keamanan Akun",
             subtitle = "Ubah kata sandi",
             onClick = {
-
+                rootNavController.navigate("gantiPassword")
             }
         )
 

@@ -91,7 +91,7 @@ fun TransaksiStatus(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = state.message ?: "Terjadi kesalahan",
+                        text = "Silahkan Pilih Metode Pembayaran",
                         color = Color.Red,
                         fontFamily = CustomFontFamily
                     )
