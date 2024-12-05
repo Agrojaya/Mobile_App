@@ -1,5 +1,7 @@
-package com.febriandi.agrojaya.screens
+package com.febriandi.agrojaya.screens.profile
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,45 +13,48 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.febriandi.agrojaya.R
+import com.febriandi.agrojaya.model.UserResponse
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
-import com.google.firebase.auth.FirebaseAuth
+import com.febriandi.agrojaya.utils.Resource
 
 @Composable
 fun ProfileScreen(
-    navController: NavController,
     rootNavController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel(),
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val currentUser = FirebaseAuth.getInstance().currentUser
-    val displayName = currentUser?.email?.substringBefore("@") ?: "N/A"
-    val email = currentUser?.email ?: "N/A"
-
+    val profilePhotoUri by profileViewModel.profilePhotoUri.collectAsState()
+    val userState by profileViewModel.userState.collectAsState()
     val scrollState = rememberScrollState()
 
+    LaunchedEffect(Unit) {
+        profileViewModel.loadUserData()
+        profileViewModel.loadProfilePhoto()
+    }
 
 
     Column(
@@ -83,32 +88,43 @@ fun ProfileScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .size(100.dp)
-                    .border(2.dp, Color(0xFF4CAF50), CircleShape)
+                    .size(120.dp)
+                    .border(2.dp, colorResource(id = R.color.green_400), CircleShape)
                     .padding(3.dp)
                     .clip(CircleShape)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(profilePhotoUri)
+                        .error(R.drawable.profile)
+                        .fallback(R.drawable.profile)
+                        .placeholder(R.drawable.profile)
+                        .build(),
+                    contentDescription = "Foto Profil",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            val userData = when (userState) {
+                is Resource.Success -> (userState as Resource.Success<UserResponse>).data
+                else -> null
+            }
+
             Text(
-                text = displayName,
+                text = userData?.username ?: "Nama Pengguna",
                 fontSize = 14.sp,
                 fontFamily = CustomFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(id = R.color.text_color)
-
             )
 
             Text(
-                text = email,
+                text = userData?.email ?: "email@example.com",
                 fontSize = 12.sp,
                 fontFamily = CustomFontFamily,
                 color = Color.Gray
@@ -117,7 +133,9 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = { },
+                onClick = {
+                    rootNavController.navigate("editProfile")
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.green_400)
                 ),

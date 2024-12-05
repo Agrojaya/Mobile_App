@@ -10,11 +10,14 @@ import com.febriandi.agrojaya.model.PaymentResponse
 import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.model.TransaksiRequest
 import com.febriandi.agrojaya.model.TransaksiResponse
+import com.febriandi.agrojaya.model.UpdateUserRequest
 import com.febriandi.agrojaya.model.User
+import com.febriandi.agrojaya.model.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
@@ -57,4 +60,9 @@ interface ApiService {
     @GET("transaksi/status/{order_id}")
     suspend fun getStatusTransaksi(@Path("order_id") order_id: String): PaymentStatus
 
+    @GET("users/{id}")
+    suspend fun getUserById(@Path("id") id: String): UserResponse
+
+    @PUT("users/{userId}")
+    suspend fun updateUser(@Path("userId") userId: String, @Body request: UpdateUserRequest): Response<Unit>
 }

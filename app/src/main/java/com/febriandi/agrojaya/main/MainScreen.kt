@@ -20,9 +20,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.NavItem
-import com.febriandi.agrojaya.screens.HomeScreen
+import com.febriandi.agrojaya.screens.home.HomeScreen
 import com.febriandi.agrojaya.screens.Paket.PaketScreen
-import com.febriandi.agrojaya.screens.ProfileScreen
+import com.febriandi.agrojaya.screens.profile.ProfileScreen
 import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
@@ -132,7 +132,6 @@ fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) 
             composable("profile") {
                 ProfileScreen(
                     rootNavController = rootNavController,
-                    navController = navController
                 )
             }
             composable(

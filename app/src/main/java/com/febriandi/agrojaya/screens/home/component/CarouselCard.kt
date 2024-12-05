@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.component
+package com.febriandi.agrojaya.screens.home.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

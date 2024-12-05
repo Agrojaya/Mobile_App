@@ -25,6 +25,7 @@ import com.febriandi.agrojaya.screens.login.ForgotPasswordScreen
 import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
+import com.febriandi.agrojaya.screens.profile.EditProfileScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
 import com.febriandi.agrojaya.screens.transaksi.DetailTransaksi
 import com.febriandi.agrojaya.screens.transaksi.PaymentWebViewScreen
@@ -122,6 +123,10 @@ fun AgrojayaApp(
 
         composable("gantiPassword") {
             GantiPasswordScreen(navController = navController)
+        }
+
+        composable("editProfile") {
+            EditProfileScreen(navController = navController)
         }
 
         composable("lupaPassword") {

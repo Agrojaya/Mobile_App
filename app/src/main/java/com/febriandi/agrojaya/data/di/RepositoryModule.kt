@@ -1,17 +1,24 @@
 package com.febriandi.agrojaya.data.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.febriandi.agrojaya.data.RepositoryImpl.AlamatRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.ArtikelRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.LocationRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.PaketRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.UserRepositoryImpl
 import com.febriandi.agrojaya.data.Repository.*
+import com.febriandi.agrojaya.data.RepositoryImpl.ProfileRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.TransaksiRepositoryImpl
+import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.data.remote.LocationApiService
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -60,6 +67,16 @@ object RepositoryProviderModule {
         locationApiService: LocationApiService
     ): LocationRepository {
         return LocationRepositoryImpl(locationApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(
+        firebaseAuth: FirebaseAuth,
+        apiService: ApiService,
+        @ApplicationContext context: Context
+    ): ProfileRepository {
+        return ProfileRepositoryImpl(firebaseAuth, apiService, context)
     }
 
 }
