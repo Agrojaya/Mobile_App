@@ -1,3 +1,5 @@
+package com.febriandi.agrojaya.screens.alamat
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -8,23 +10,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.febriandi.agrojaya.screens.alamat.TambahAlamatViewModel
+import android.widget.Toast
+import com.febriandi.agrojaya.model.*
 import com.febriandi.agrojaya.screens.alamat.components.Header
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.AlamatFormState
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.ErrorDialog
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.FormContent
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.LoadingOverlay
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.SubmitButton
-import android.widget.Toast
 
 @Composable
-fun TambahAlamat(
+fun UpdateAlamatScreen(
     navController: NavController,
+    alamatId: Int,
     viewModel: TambahAlamatViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
+    // State untuk formulir alamat
     var formState by remember {
         mutableStateOf(
             AlamatFormState(
@@ -44,51 +47,88 @@ fun TambahAlamat(
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
-    // Collect states from ViewModel
+    // Collect states dari ViewModel
     val provinsiList by viewModel.provinsiList.collectAsState()
     val kabupatenList by viewModel.kabupatenList.collectAsState()
     val kecamatanList by viewModel.kecamatanList.collectAsState()
     val kelurahanList by viewModel.kelurahanList.collectAsState()
     val isSubmitting by viewModel.isSubmitting.collectAsState()
+    val existingAlamat by viewModel.existingAlamat.collectAsState()
 
-    // Handle submit result
-    // Handle submit result
+    // Muat data alamat saat komponen pertama kali dibuat
+    LaunchedEffect(alamatId) {
+        viewModel.loadAlamatById(alamatId)
+    }
+
+    // Update form state ketika data alamat dimuat
+    LaunchedEffect(existingAlamat) {
+        existingAlamat?.let { alamat ->
+            formState = AlamatFormState(
+                nama = alamat.nama,
+                noHp = alamat.noHp,
+                provinsi = Provinsi(
+                    id = alamat.provinsi,
+                    nama = alamat.provinsi
+                ),
+                kabupaten = Kabupaten(
+                    id = alamat.kabupaten,
+                    provinsi_id = alamat.provinsi,
+                    nama = alamat.kabupaten
+                ),
+                kecamatan = Kecamatan(
+                    id = alamat.kecamatan,
+                    kabupaten_id = alamat.kabupaten,
+                    nama = alamat.kecamatan
+                ),
+                kelurahan = Kelurahan(
+                    id = alamat.kelurahan,
+                    kecamatan_id = alamat.kecamatan,
+                    nama = alamat.kelurahan
+                ),
+                alamat = alamat.alamatLengkap,
+                catatan = alamat.catatan
+            )
+        }
+    }
+
+    // Tangani hasil submit
     LaunchedEffect(Unit) {
         viewModel.submitResult.collect { result ->
             result.fold(
                 onSuccess = { response ->
                     if (response.success) {
                         // Set flag di previousBackStackEntry
-                        navController.previousBackStackEntry?.savedStateHandle?.set("alamat_added", true)
+                        navController.previousBackStackEntry?.savedStateHandle?.set("alamat_updated", true)
 
-                        // Show Toast
-                        Toast.makeText(context, "Alamat Berhasil disimpan", Toast.LENGTH_SHORT).show()
+                        // Tampilkan Toast
+                        Toast.makeText(context, "Alamat Berhasil diperbarui", Toast.LENGTH_SHORT).show()
 
-                        // Navigate back after showing success
+                        // Kembali ke layar sebelumnya
                         navController.popBackStack()
                     } else {
-                        // Pastikan errorMessage tidak null
-                        errorMessage = response.message ?: "Gagal menyimpan alamat"
+                        // Pastikan pesan error tidak null
+                        errorMessage = response.message ?: "Gagal memperbarui alamat"
                         showErrorDialog = true
                     }
                 },
                 onFailure = { exception ->
-                    // Pastikan errorMessage tidak null
+                    // Pastikan pesan error tidak null
                     errorMessage = exception.message ?: "Terjadi kesalahan"
                     showErrorDialog = true
                 }
             )
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         // Header
-        Header(navController, title = "Tambah Alamat")
+        Header(navController, title = "Perbarui Alamat")
 
-        // Form Content
+        // Konten Formulir
         FormContent(
             formState = formState,
             onFormStateChange = { formState = it },
@@ -96,17 +136,39 @@ fun TambahAlamat(
             kabupatenList = kabupatenList,
             kecamatanList = kecamatanList,
             kelurahanList = kelurahanList,
-            onProvinsiSelected = { viewModel.loadKabupaten(it.id) },
-            onKabupatenSelected = { viewModel.loadKecamatan(it.id) },
-            onKecamatanSelected = { viewModel.loadKelurahan(it.id) }
+            onProvinsiSelected = { selectedProvinsi ->
+                formState = formState.copy(
+                    provinsi = selectedProvinsi,
+                    kabupaten = null,
+                    kecamatan = null,
+                    kelurahan = null
+                )
+                viewModel.loadKabupaten(selectedProvinsi.id)
+            },
+            onKabupatenSelected = { selectedKabupaten ->
+                formState = formState.copy(
+                    kabupaten = selectedKabupaten,
+                    kecamatan = null,
+                    kelurahan = null
+                )
+                viewModel.loadKecamatan(selectedKabupaten.id)
+            },
+            onKecamatanSelected = { selectedKecamatan ->
+                formState = formState.copy(
+                    kecamatan = selectedKecamatan,
+                    kelurahan = null
+                )
+                viewModel.loadKelurahan(selectedKecamatan.id)
+            },
         )
 
-        // Submit Button
+
         SubmitButton(
             isSubmitting = isSubmitting,
             formState = formState,
             onSubmit = {
-                viewModel.simpanAlamat(
+                viewModel.updateAlamat(
+                    id = alamatId,
                     nama = formState.nama,
                     noHp = formState.noHp,
                     provinsi = formState.provinsi?.nama ?: "",
@@ -124,7 +186,7 @@ fun TambahAlamat(
         )
     }
 
-    // Dialogs and Loading
+    // Dialog dan Loading
     if (showErrorDialog && errorMessage.isNotEmpty()) {
         ErrorDialog(
             message = errorMessage,
@@ -139,6 +201,9 @@ fun TambahAlamat(
 
 @Preview(showBackground = true)
 @Composable
-fun TambahAlamatScreenPreview() {
-    TambahAlamat(navController = rememberNavController())
+fun UpdateAlamatScreenPreview() {
+    UpdateAlamatScreen(
+        navController = rememberNavController(),
+        alamatId = 1
+    )
 }

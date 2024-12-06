@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.febriandi.agrojaya.data.Repository.AlamatRepository
 import com.febriandi.agrojaya.data.Repository.LocationRepository
 import com.febriandi.agrojaya.model.AlamatRequest
+import com.febriandi.agrojaya.model.AlamatResponse
+import com.febriandi.agrojaya.model.AlamatUpdateRequest
 import com.febriandi.agrojaya.model.BaseResponse
 import com.febriandi.agrojaya.model.Kabupaten
 import com.febriandi.agrojaya.model.Kecamatan
@@ -50,6 +52,9 @@ class TambahAlamatViewModel @Inject constructor(
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
+
+    private val _existingAlamat = MutableStateFlow<AlamatResponse?>(null)
+    val existingAlamat: StateFlow<AlamatResponse?> = _existingAlamat.asStateFlow()
 
     init {
         loadProvinsi()
@@ -133,6 +138,69 @@ class TambahAlamatViewModel @Inject constructor(
                 .onSuccess { _kelurahanList.value = it }
                 .onFailure { _error.value = it.message }
             _isLoading.value = false
+        }
+    }
+
+    fun loadAlamatById(id: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val alamat = alamatRepository.getAlamatById(id)
+                _existingAlamat.value = alamat
+
+                // Muat daftar lokasi bertahap
+                loadProvinsi()
+                loadKabupaten(alamat.provinsi)
+                loadKecamatan(alamat.kabupaten)
+                loadKelurahan(alamat.kecamatan)
+            } catch (e: Exception) {
+                _error.value = "Gagal memuat alamat: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun updateAlamat(
+        id: Int,
+        nama: String,
+        noHp: String,
+        provinsi: String,
+        kabupaten: String,
+        kecamatan: String,
+        kelurahan: String,
+        alamatLengkap: String,
+        catatan: String
+    ) {
+        viewModelScope.launch {
+            _isSubmitting.value = true
+            try {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser == null) {
+                    _submitResult.emit(Result.failure(Exception("User belum login")))
+                    return@launch
+                }
+
+                val alamatRequest = AlamatUpdateRequest(
+                    id = id,
+                    uid = currentUser.uid,
+                    nama = nama,
+                    noHp = noHp,
+                    provinsi = provinsi,
+                    kabupaten = kabupaten,
+                    kecamatan = kecamatan,
+                    kelurahan = kelurahan,
+                    alamatLengkap = alamatLengkap,
+                    catatan = catatan
+                )
+
+                val result = alamatRepository.updateAlamat(alamatRequest)
+                _submitResult.emit(result)
+            } catch (e: Exception) {
+                _submitResult.emit(Result.failure(e))
+            } finally {
+                _isSubmitting.value = false
+            }
         }
     }
 }

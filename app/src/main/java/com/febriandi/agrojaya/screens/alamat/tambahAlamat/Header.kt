@@ -15,7 +15,10 @@ import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 @Composable
-fun Header(navController: NavController) {
+fun Header(
+    navController: NavController,
+    title: String
+    ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -25,7 +28,7 @@ fun Header(navController: NavController) {
         ButtonBack { navController.popBackStack() }
         Text(
             modifier = Modifier.padding(horizontal = 10.dp),
-            text = "Tambah Alamat",
+            text = title,
             fontSize = 14.sp,
             fontFamily = CustomFontFamily,
             fontWeight = FontWeight.SemiBold,

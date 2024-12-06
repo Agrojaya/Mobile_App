@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.onboarding
+package com.febriandi.agrojaya.screens.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

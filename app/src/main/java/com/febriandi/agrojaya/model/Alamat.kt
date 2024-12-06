@@ -30,3 +30,16 @@ data class AlamatResponse(
     val alamatLengkap: String,
     val catatan: String
 )
+
+data class AlamatUpdateRequest(
+    val id: Int? = null,
+    val uid: String,
+    val nama: String,
+    val noHp: String,
+    val provinsi: String,
+    val kabupaten: String,
+    val kecamatan: String,
+    val kelurahan: String,
+    val alamatLengkap: String,
+    val catatan: String
+)

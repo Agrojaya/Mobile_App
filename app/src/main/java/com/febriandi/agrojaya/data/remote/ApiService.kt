@@ -2,6 +2,7 @@ package com.febriandi.agrojaya.data.remote
 
 import com.febriandi.agrojaya.model.AlamatRequest
 import com.febriandi.agrojaya.model.AlamatResponse
+import com.febriandi.agrojaya.model.AlamatUpdateRequest
 import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.model.BaseResponse
 import com.febriandi.agrojaya.model.GoogleUser
@@ -65,4 +66,7 @@ interface ApiService {
 
     @PUT("users/{userId}")
     suspend fun updateUser(@Path("userId") userId: String, @Body request: UpdateUserRequest): Response<Unit>
+
+    @PUT("alamat/{id}")
+    suspend fun updateAlamat(@Path("id") id: Int, @Body alamat: AlamatUpdateRequest): Response<BaseResponse>
 }

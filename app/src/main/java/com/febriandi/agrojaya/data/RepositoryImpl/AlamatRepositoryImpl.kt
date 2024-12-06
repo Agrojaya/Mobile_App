@@ -4,6 +4,7 @@ import com.febriandi.agrojaya.data.Repository.AlamatRepository
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.model.AlamatRequest
 import com.febriandi.agrojaya.model.AlamatResponse
+import com.febriandi.agrojaya.model.AlamatUpdateRequest
 import com.febriandi.agrojaya.model.BaseResponse
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
@@ -33,4 +34,17 @@ class AlamatRepositoryImpl @Inject constructor(
 
     override suspend fun getAlamatById(id: Int): AlamatResponse =
         alamatApiService.getAlamatById(id)
+
+    override suspend fun updateAlamat(alamat: AlamatUpdateRequest): Result<BaseResponse> = try {
+        val id = alamat.id ?: throw IllegalArgumentException("ID alamat harus disertakan")
+
+        val response = alamatApiService.updateAlamat(id, alamat)
+        if (response.isSuccessful) {
+            Result.success(response.body()!!)
+        } else {
+            Result.failure(Exception("Gagal memperbarui alamat: ${response.message()}"))
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
 }

@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.febriandi.agrojaya.screens.register.AfterOnboarding
-import com.febriandi.agrojaya.onboarding.OnboardingScreen
+import com.febriandi.agrojaya.screens.onboarding.OnboardingScreen
 import com.febriandi.agrojaya.screens.artikel.ArtikelScreen
 import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.screens.Paket.DetailPaketScreen
@@ -21,6 +21,7 @@ import com.febriandi.agrojaya.screens.NotifikasiScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.transaksi.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
+import com.febriandi.agrojaya.screens.alamat.UpdateAlamatScreen
 import com.febriandi.agrojaya.screens.login.ForgotPasswordScreen
 import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
@@ -181,6 +182,22 @@ fun AgrojayaApp(
             )
         }
 
+        composable(
+            "ubahAlamat/{alamatId}",
+            arguments = listOf(
+                navArgument("alamatId") {
+                    type = NavType.IntType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getInt("alamatId")?.let {
+                UpdateAlamatScreen(
+                    navController = navController,
+                    alamatId = it
+                )
+            }
+        }
 
         composable("login") {
             LoginScreen(navController)

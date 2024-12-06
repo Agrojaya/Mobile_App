@@ -1,4 +1,4 @@
-package com.febriandi.agrojaya.onboarding
+package com.febriandi.agrojaya.screens.onboarding
 
 import androidx.annotation.DrawableRes
 import com.febriandi.agrojaya.R

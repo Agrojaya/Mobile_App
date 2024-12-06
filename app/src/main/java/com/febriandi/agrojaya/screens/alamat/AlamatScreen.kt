@@ -48,6 +48,20 @@ fun AlamatScreen(
         ?.savedStateHandle
         ?.get<Boolean>("alamat_added") ?: false
 
+    val alamatUpdatedFlag = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<Boolean>("alamat_updated") ?: false
+
+
+    LaunchedEffect(alamatUpdatedFlag) {
+        if (alamatUpdatedFlag) {
+            viewModel.loadAlamat()
+            // Reset flag
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.set("alamat_updated", false)
+        }
+    }
 
     LaunchedEffect(alamatAddedFlag) {
         if (alamatAddedFlag) {
