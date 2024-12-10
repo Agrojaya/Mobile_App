@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.hilt.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -112,7 +113,11 @@ dependencies {
 
     //firebase
     implementation(libs.play.services.auth)
-
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.database.ktx)
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
 }
 
 

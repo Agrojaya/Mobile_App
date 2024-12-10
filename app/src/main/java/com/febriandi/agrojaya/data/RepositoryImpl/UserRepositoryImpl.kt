@@ -3,6 +3,7 @@ package com.febriandi.agrojaya.data.RepositoryImpl
 import com.febriandi.agrojaya.data.Repository.UserRepository
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.febriandi.agrojaya.data.remote.ApiService
+import com.febriandi.agrojaya.model.UpdateTokenRequest
 import com.febriandi.agrojaya.model.User
 import javax.inject.Inject
 
@@ -10,9 +11,9 @@ class UserRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : UserRepository {
 
-    override suspend fun createUser(uid: String, username: String, email: String): Resource<User> {
+    override suspend fun createUser(uid: String, username: String, email: String, fcmToken: String): Resource<User> {
         return try {
-            val user = User(uid, username, email)
+            val user = User(uid, username, email, fcmToken)
             val response = apiService.createUser(user)
 
             if (response.isSuccessful) {
@@ -22,6 +23,16 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Resource.Error("Error creating user: ${e.message}")
+        }
+    }
+
+    override suspend fun updateFCMToken(uid: String, token: String): Resource<Unit> {
+        return try {
+            val request = UpdateTokenRequest(token)
+            apiService.updateUserToken(uid, request)
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message)
         }
     }
 }

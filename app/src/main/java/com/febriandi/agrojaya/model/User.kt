@@ -5,7 +5,8 @@ import com.febriandi.agrojaya.utils.Resource
 data class User(
     val uid: String,
     val username: String,
-    val email: String
+    val email: String,
+    val fcmToken: String
 )
 
 data class ProfileState(
@@ -23,6 +24,10 @@ data class UserResponse(
     val username: String,
     val email: String,
     val phoneNumber: String
+)
+
+data class UpdateTokenRequest(
+    val fcmToken: String
 )
 
 

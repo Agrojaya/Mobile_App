@@ -17,7 +17,6 @@ import com.febriandi.agrojaya.screens.artikel.ArtikelScreen
 import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.screens.Paket.DetailPaketScreen
 import com.febriandi.agrojaya.screens.login.LoginScreen
-import com.febriandi.agrojaya.screens.NotifikasiScreen
 import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.transaksi.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
@@ -25,6 +24,7 @@ import com.febriandi.agrojaya.screens.alamat.UpdateAlamatScreen
 import com.febriandi.agrojaya.screens.login.ForgotPasswordScreen
 import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
+import com.febriandi.agrojaya.screens.notifikasi.NotifikasiScreen
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
 import com.febriandi.agrojaya.screens.profile.EditProfileScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
@@ -101,7 +101,7 @@ fun AgrojayaApp(
         }
 
         composable("notifikasi") {
-            NotifikasiScreen(navController)
+            NotifikasiScreen(navController = navController)
         }
 
         composable("artikel") {

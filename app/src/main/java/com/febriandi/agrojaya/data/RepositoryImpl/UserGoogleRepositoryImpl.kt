@@ -9,9 +9,9 @@ import javax.inject.Inject
 class UserGoogleRepositoryImpl @Inject constructor(
     private  val apiService: ApiService
 ) : UserGoogleRepository {
-    override suspend fun saveGoogleUser(uid: String, email: String, username: String): Resource<GoogleUser> {
+    override suspend fun saveGoogleUser(uid: String, email: String, username: String, fcmToken: String): Resource<GoogleUser> {
         return try {
-            val user = GoogleUser(uid = uid, email = email, username = username)
+            val user = GoogleUser(uid = uid, email = email, username = username, fcmToken = fcmToken)
             val response = apiService.createGoogleUser(user)
 
             if (response.isSuccessful) {

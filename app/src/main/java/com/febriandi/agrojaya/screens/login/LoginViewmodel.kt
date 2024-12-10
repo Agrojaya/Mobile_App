@@ -9,7 +9,7 @@ import com.febriandi.agrojaya.data.Repository.UserRepository
 import com.febriandi.agrojaya.data.firebase.AuthRepository
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +38,14 @@ class LoginViewModel @Inject constructor(
     // Status login dari DataStore
     val isUserLoggedIn: StateFlow<Boolean> = repository.isUserLoggedIn()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
+    private suspend fun getFCMToken(): String {
+        return try {
+            FirebaseMessaging.getInstance().token.await()
+        } catch (e: Exception) {
+            ""
+        }
+    }
 
     fun loginUser(email: String, password: String, home: () -> Unit) {
         viewModelScope.launch {
@@ -64,7 +73,8 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         val uid = result.data?.uid ?: return@collect
-                        when (val apiResult = userRepository.createUser(uid, username, email)) {
+                        val fcmToken = getFCMToken()
+                        when (val apiResult = userRepository.createUser(uid, username, email, fcmToken)) {
                             is Resource.Success -> {
                                 repository.saveLoginState(true) // Simpan status login
                                 _state.send(LoginState(success = "Register Berhasil"))
@@ -100,8 +110,9 @@ class LoginViewModel @Inject constructor(
                                 val uid = firebaseUser.uid
                                 val email = firebaseUser.email ?: ""
                                 val username = firebaseUser.displayName ?: email.substringBefore("@")
+                                val fcmToken = getFCMToken()
 
-                                when (val apiResult = userGoogleRepository.saveGoogleUser(uid, email, username)) {
+                                when (val apiResult = userGoogleRepository.saveGoogleUser(uid, email, username, fcmToken)) {
                                     is Resource.Success -> {
                                         repository.saveLoginState(true) // Simpan status login
                                         _stateGoogle.value = LoginGoogleState(success = firebaseUser)

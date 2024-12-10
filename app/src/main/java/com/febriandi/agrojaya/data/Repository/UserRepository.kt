@@ -4,5 +4,6 @@ import com.febriandi.agrojaya.data.firebase.Resource
 import com.febriandi.agrojaya.model.User
 
 interface UserRepository {
-    suspend fun createUser(uid: String, username: String, email: String): Resource<User>
+    suspend fun createUser(uid: String, username: String, email: String, fcmToken: String): Resource<User>
+    suspend fun updateFCMToken(uid: String, token: String): Resource<Unit>
 }

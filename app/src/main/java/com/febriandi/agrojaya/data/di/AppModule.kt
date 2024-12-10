@@ -11,6 +11,7 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.febriandi.agrojaya.data.firebase.AuthRepository
 import com.febriandi.agrojaya.data.firebase.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +52,11 @@ object AppModule {
     ): AuthRepository {
         return AuthRepositoryImpl(firebaseAuth, dataStore)
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabase(): FirebaseDatabase {
+        return FirebaseDatabase.getInstance()
+    }
+
 }

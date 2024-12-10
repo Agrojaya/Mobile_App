@@ -49,7 +49,7 @@ fun PaketCarousel(
     ) {
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = 32.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp),
             modifier = Modifier.fillMaxWidth(),
         ) { page ->
             val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue

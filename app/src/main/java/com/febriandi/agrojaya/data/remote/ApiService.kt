@@ -11,6 +11,7 @@ import com.febriandi.agrojaya.model.PaymentResponse
 import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.model.TransaksiRequest
 import com.febriandi.agrojaya.model.TransaksiResponse
+import com.febriandi.agrojaya.model.UpdateTokenRequest
 import com.febriandi.agrojaya.model.UpdateUserRequest
 import com.febriandi.agrojaya.model.User
 import com.febriandi.agrojaya.model.UserResponse
@@ -66,6 +67,9 @@ interface ApiService {
 
     @PUT("users/{userId}")
     suspend fun updateUser(@Path("userId") userId: String, @Body request: UpdateUserRequest): Response<Unit>
+
+    @PUT("users/token/{uid}")
+    suspend fun updateUserToken(@Path("uid") uid: String, @Body request: UpdateTokenRequest)
 
     @PUT("alamat/{id}")
     suspend fun updateAlamat(@Path("id") id: Int, @Body alamat: AlamatUpdateRequest): Response<BaseResponse>
