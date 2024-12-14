@@ -121,7 +121,7 @@ fun AgrojayaApp(
             )
         }
 
-        composable("jadwalAktifitas") {
+        composable("jadwalAktivitas") {
             JadwalAktivitasScreen(navController = navController)
         }
 

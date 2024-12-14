@@ -16,11 +16,13 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.screens.home.component.PaketCarousel
 import com.febriandi.agrojaya.screens.Paket.PaketViewModel
 import com.febriandi.agrojaya.screens.artikel.ArtikelViewModel
+import com.febriandi.agrojaya.screens.home.component.HomeAktivitasComponent
 import com.febriandi.agrojaya.screens.home.component.HomeArtikelContent
 import com.febriandi.agrojaya.screens.home.component.HomeArtikelHeader
 import com.febriandi.agrojaya.screens.home.component.HomeHeader
 import com.febriandi.agrojaya.screens.home.component.HomeScheduleSection
 import com.febriandi.agrojaya.screens.home.component.HomeSearchField
+import com.febriandi.agrojaya.screens.pengingat.PengingatViewModel
 import com.febriandi.agrojaya.utils.Resource
 
 
@@ -29,13 +31,14 @@ fun HomeScreen(
     navController: NavController,
     rootNavController: NavController,
     viewModel: ArtikelViewModel = hiltViewModel(),
-    paketViewModel: PaketViewModel = hiltViewModel()
+    paketViewModel: PaketViewModel = hiltViewModel(),
+    pengingatViewModel: PengingatViewModel = hiltViewModel()
 ) {
 
     var search by remember { mutableStateOf("") }
     val artikelState by viewModel.artikelState.collectAsState()
     val paketState by paketViewModel.paketState.collectAsState()
-
+    val pengingatState by pengingatViewModel.daftarPengingat.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -80,7 +83,14 @@ fun HomeScreen(
 
                 // Jadwal Kegiatan
                 item {
-                    HomeScheduleSection(rootNavController)
+                    if (pengingatState.isNotEmpty()) {
+                        HomeAktivitasComponent(
+                            rootNavController = rootNavController,
+                            viewModel = pengingatViewModel
+                        )
+                    } else {
+                        HomeScheduleSection(rootNavController)
+                    }
                 }
 
                 // Artikel Header

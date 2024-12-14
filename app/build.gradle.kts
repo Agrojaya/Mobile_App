@@ -116,7 +116,6 @@ dependencies {
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.database.ktx)
-    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
 
     //room
@@ -124,10 +123,14 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
-    implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
-    implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
+    //Calendar
+    implementation(libs.calendar)
+    implementation(libs.clock)
+    implementation(libs.core)
 
+    //Work Manager
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.work.runtime)
 }
 
 

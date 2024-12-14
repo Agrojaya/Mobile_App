@@ -71,7 +71,7 @@ fun HomeScheduleSection(rootNavController: NavController) {
 
                 Button(
                     onClick = {
-                        rootNavController.navigate("jadwalAktifitas")
+                        rootNavController.navigate("jadwalAktivitas")
                     },
                     modifier = Modifier
                         .width(150.dp)

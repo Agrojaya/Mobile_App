@@ -120,7 +120,7 @@ fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) 
             composable("home") {
                 HomeScreen(
                     navController = navController,
-                    rootNavController = rootNavController
+                    rootNavController = rootNavController,
                 )
             }
             composable("paket") {
