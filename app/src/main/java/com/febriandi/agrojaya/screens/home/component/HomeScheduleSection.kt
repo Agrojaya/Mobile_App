@@ -70,7 +70,9 @@ fun HomeScheduleSection(rootNavController: NavController) {
                 )
 
                 Button(
-                    onClick = { /* TODO: Implementasi */ },
+                    onClick = {
+                        rootNavController.navigate("jadwalAktifitas")
+                    },
                     modifier = Modifier
                         .width(150.dp)
                         .height(50.dp)

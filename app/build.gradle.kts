@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.febriandi.agrojaya"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -116,8 +116,18 @@ dependencies {
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.database.ktx)
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
-    implementation("androidx.hilt:hilt-work:1.2.0")
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+
+    //room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+    implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
+    implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
+
 }
 
 

@@ -2,6 +2,7 @@ package com.febriandi.agrojaya.data.di
 
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
+import androidx.room.Room
 import androidx.work.WorkerFactory
 import com.febriandi.agrojaya.data.RepositoryImpl.AlamatRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.ArtikelRepositoryImpl
@@ -10,8 +11,11 @@ import com.febriandi.agrojaya.data.RepositoryImpl.PaketRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.UserRepositoryImpl
 import com.febriandi.agrojaya.data.Repository.*
 import com.febriandi.agrojaya.data.RepositoryImpl.NotificationRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.PengingatRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.ProfileRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.TransaksiRepositoryImpl
+import com.febriandi.agrojaya.data.dao.PengingatDao
+import com.febriandi.agrojaya.data.database.PengingatDatabase
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.data.remote.LocationApiService
 import com.google.firebase.auth.FirebaseAuth
@@ -88,5 +92,27 @@ object RepositoryProviderModule {
         firebaseAuth: FirebaseAuth
     ): NotificationRepository {
         return NotificationRepositoryImpl(database, firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPengingatDatabase(@ApplicationContext context: Context): PengingatDatabase {
+        return Room.databaseBuilder(
+            context,
+            PengingatDatabase::class.java,
+            "pengingat_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPengingatDao(database: PengingatDatabase): PengingatDao {
+        return database.pengingatDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPengingatRepository(pengingatDao: PengingatDao): PengingatRepository {
+        return PengingatRepositoryImpl(pengingatDao)
     }
 }

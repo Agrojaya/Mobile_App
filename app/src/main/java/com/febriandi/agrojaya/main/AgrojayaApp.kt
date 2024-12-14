@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.main
 
+import JadwalAktivitasScreen
 import TambahAlamat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +27,7 @@ import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.notifikasi.NotifikasiScreen
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
+import com.febriandi.agrojaya.screens.pengingat.TambahPengingatScreen
 import com.febriandi.agrojaya.screens.profile.EditProfileScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
 import com.febriandi.agrojaya.screens.transaksi.DetailTransaksi
@@ -102,6 +104,25 @@ fun AgrojayaApp(
 
         composable("notifikasi") {
             NotifikasiScreen(navController = navController)
+        }
+
+        composable("tambahPengingat") {
+            TambahPengingatScreen(navController = navController)
+        }
+
+        composable(
+            "tambahPengingat/{pengingatId}",
+            arguments = listOf(navArgument("pengingatId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val pengingatId = backStackEntry.arguments?.getInt("pengingatId")
+            TambahPengingatScreen(
+                navController = navController,
+                pengingatId = pengingatId
+            )
+        }
+
+        composable("jadwalAktifitas") {
+            JadwalAktivitasScreen(navController = navController)
         }
 
         composable("artikel") {
