@@ -95,7 +95,7 @@ fun DetailTransaksi(
                 DetailTransaksiContent(
                     transaksi = state.data,
                     onBackClick = {
-                        navController.navigate("daftarTransaksi")
+                        navController.navigateUp()
                     },
                     onItemCliked = {
                         navController.navigate(

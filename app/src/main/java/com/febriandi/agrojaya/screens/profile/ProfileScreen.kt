@@ -273,7 +273,7 @@ fun ProfileScreen(
             icon = R.drawable.doc,
             text = "Syarat dan Ketentuan",
             onClick = {
-
+                rootNavController.navigate("syaratdanketentuan")
             }
         )
 
@@ -281,7 +281,7 @@ fun ProfileScreen(
             icon = R.drawable.privacy,
             text = "Kebijakan Privasi",
             onClick = {
-
+                rootNavController.navigate("kebijakanprivasi")
             }
 
         )
@@ -290,7 +290,7 @@ fun ProfileScreen(
             icon = R.drawable.call,
             text = "Kontak Kami",
             onClick = {
-
+                rootNavController.navigate("kontakKami")
             }
         )
 

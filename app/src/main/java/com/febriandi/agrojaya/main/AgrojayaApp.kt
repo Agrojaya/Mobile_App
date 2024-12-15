@@ -2,10 +2,12 @@ package com.febriandi.agrojaya.main
 
 import JadwalAktivitasScreen
 import TambahAlamat
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,6 +29,9 @@ import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.screens.notifikasi.NotifikasiScreen
 import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
+import com.febriandi.agrojaya.screens.pengaturan.KebijakanPrivasiScreen
+import com.febriandi.agrojaya.screens.pengaturan.KontakKamiScreen
+import com.febriandi.agrojaya.screens.pengaturan.SyaratDanKetentuanScreen
 import com.febriandi.agrojaya.screens.pengingat.TambahPengingatScreen
 import com.febriandi.agrojaya.screens.profile.EditProfileScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
@@ -123,6 +128,18 @@ fun AgrojayaApp(
 
         composable("jadwalAktivitas") {
             JadwalAktivitasScreen(navController = navController)
+        }
+
+        composable("syaratdanketentuan") {
+            SyaratDanKetentuanScreen(rootNavController = navController)
+        }
+
+        composable("kebijakanprivasi") {
+            KebijakanPrivasiScreen(rootNavController = navController)
+        }
+
+        composable("kontakKami") {
+            KontakKamiScreen(rootNavController = navController, context = LocalContext.current)
         }
 
         composable("artikel") {

@@ -131,26 +131,7 @@ fun ArtikelItem(
                             fontFamily = CustomFontFamily
                         )
                     }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icon_like),
-                            contentDescription = "like",
-                            colorFilter = ColorFilter.tint(colorResource(id = R.color.green_400)),
-                            modifier = Modifier
-                                .width(50.dp)
-                                .padding(start = 25.dp)
-                        )
 
-                        Text(
-                            text = artikel.like.toString(),
-                            fontSize = 12.sp,
-                            color = colorResource(id = R.color.text_color),
-                            fontWeight = FontWeight.SemiBold,
-                            fontFamily = CustomFontFamily
-                        )
-                    }
                 }
             }
         }

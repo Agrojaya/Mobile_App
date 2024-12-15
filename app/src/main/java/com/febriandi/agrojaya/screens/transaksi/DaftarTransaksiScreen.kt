@@ -60,7 +60,7 @@ fun DaftarTransaksiScreen(
                     .padding(vertical = 20.dp, horizontal = 20.dp)
             ) {
                 ButtonBack {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
