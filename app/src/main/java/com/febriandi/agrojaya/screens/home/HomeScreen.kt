@@ -1,14 +1,15 @@
 package com.febriandi.agrojaya.screens.home
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -20,12 +21,15 @@ import com.febriandi.agrojaya.screens.home.component.HomeAktivitasComponent
 import com.febriandi.agrojaya.screens.home.component.HomeArtikelContent
 import com.febriandi.agrojaya.screens.home.component.HomeArtikelHeader
 import com.febriandi.agrojaya.screens.home.component.HomeHeader
-import com.febriandi.agrojaya.screens.home.component.HomeScheduleSection
 import com.febriandi.agrojaya.screens.home.component.HomeSearchField
+import com.febriandi.agrojaya.screens.home.component.HomeScheduleSection
 import com.febriandi.agrojaya.screens.pengingat.PengingatViewModel
 import com.febriandi.agrojaya.utils.Resource
+import kotlinx.coroutines.delay
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -34,11 +38,26 @@ fun HomeScreen(
     paketViewModel: PaketViewModel = hiltViewModel(),
     pengingatViewModel: PengingatViewModel = hiltViewModel()
 ) {
-
     var search by remember { mutableStateOf("") }
+    var isSearchClicked by remember { mutableStateOf(false) }
     val artikelState by viewModel.artikelState.collectAsState()
     val paketState by paketViewModel.paketState.collectAsState()
     val pengingatState by pengingatViewModel.daftarPengingat.collectAsState()
+
+    LaunchedEffect(isSearchClicked) {
+        if (isSearchClicked && search.isNotEmpty()) {
+            val encodedSearch = URLEncoder.encode(search, StandardCharsets.UTF_8.toString())
+
+            rootNavController.navigate("hasilPencarian/$encodedSearch") {
+                popUpTo(rootNavController.graph.startDestinationId) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+            isSearchClicked = false
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -72,11 +91,28 @@ fun HomeScreen(
                             }
                         }
                         is Resource.Error -> {
-                            Text(
-                                text = "Gagal memuat paket",
-                                color = Color.Red,
-                                modifier = Modifier.padding(16.dp)
-                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "Gagal memuat paket",
+                                    color = Color.Red,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                )
+                                Button(
+                                    onClick = { paketViewModel.loadPakets() },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = colorResource(id = R.color.green_500)
+                                    )
+                                ) {
+                                    Text("Coba Lagi")
+                                }
+                            }
                         }
                     }
                 }
@@ -118,7 +154,10 @@ fun HomeScreen(
 
                 HomeSearchField(
                     search = search,
-                    onSearchChange = { search = it }
+                    onSearchChange = { search = it },
+                    onSearchClick = {
+                        isSearchClicked = true
+                    }
                 )
             }
         }

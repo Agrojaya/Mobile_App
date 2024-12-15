@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.screens.artikel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.febriandi.agrojaya.data.Repository.ArtikelRepository
@@ -21,6 +22,10 @@ class ArtikelViewModel @Inject constructor(
 
     private var originalArtikels: List<ArtikelResponse> = emptyList()
 
+    private val _searchResultState = MutableStateFlow<List<ArtikelResponse>>(emptyList())
+    val searchResultState: StateFlow<List<ArtikelResponse>> = _searchResultState
+
+
     init {
         loadArtikels()
     }
@@ -37,6 +42,48 @@ class ArtikelViewModel @Inject constructor(
             } catch (e: Exception) {
                 _artikelState.value = Resource.Error(e.message ?: "Terjadi kesalahan")
             }
+        }
+    }
+
+    fun searchArtikelshome(query: String) {
+        viewModelScope.launch {
+            Log.d("ArtikelViewModel", "Searching with query: $query")
+
+            // Log total artikel yang tersedia
+            val artikelsToSearch = when {
+                originalArtikels.isNotEmpty() -> {
+                    Log.d("ArtikelViewModel", "Using originalArtikels, size: ${originalArtikels.size}")
+                    originalArtikels
+                }
+                _artikelState.value is Resource.Success -> {
+                    val data = (_artikelState.value as Resource.Success).data ?: emptyList()
+                    Log.d("ArtikelViewModel", "Using artikelState, size: ${data.size}")
+                    data
+                }
+                else -> {
+                    Log.d("ArtikelViewModel", "No articles available")
+                    emptyList()
+                }
+            }
+
+            // Log detail setiap artikel untuk debugging
+            artikelsToSearch.forEachIndexed { index, artikel ->
+                Log.d("ArtikelViewModel", "Artikel $index: Judul = ${artikel.judul}")
+            }
+
+            val filteredArtikels = artikelsToSearch.filter { artikel ->
+                val judulMatch = artikel.judul.contains(query, ignoreCase = true)
+                val isiMatch = artikel.isi.contains(query, ignoreCase = true)
+
+                if (judulMatch || isiMatch) {
+                    Log.d("ArtikelViewModel", "Match found: ${artikel.judul}")
+                }
+
+                judulMatch || isiMatch
+            }
+
+            Log.d("ArtikelViewModel", "Filtered articles count: ${filteredArtikels.size}")
+            _searchResultState.value = filteredArtikels
         }
     }
 

@@ -89,11 +89,11 @@ fun ArtikelScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(30.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = colorResource(id = R.color.green_500),
+                    focusedBorderColor = colorResource(id = R.color.green_300),
                     unfocusedBorderColor = colorResource(id = R.color.stroke_form),
                     focusedTextColor = colorResource(id = R.color.text_color),
                     unfocusedTextColor = colorResource(id = R.color.text_color),
-                    focusedLabelColor = colorResource(id = R.color.green_500),
+                    focusedLabelColor = colorResource(id = R.color.green_300),
                     unfocusedLabelColor = colorResource(id = R.color.text_color),
                     cursorColor = colorResource(id = R.color.text_color),
                     unfocusedContainerColor = colorResource(id = R.color.green_100),

@@ -24,6 +24,7 @@ import com.febriandi.agrojaya.screens.register.RegisterScreen
 import com.febriandi.agrojaya.screens.transaksi.TransaksiStatus
 import com.febriandi.agrojaya.screens.alamat.AlamatScreen
 import com.febriandi.agrojaya.screens.alamat.UpdateAlamatScreen
+import com.febriandi.agrojaya.screens.home.component.SearchResultScreen
 import com.febriandi.agrojaya.screens.login.ForgotPasswordScreen
 import com.febriandi.agrojaya.screens.login.GantiPasswordScreen
 import com.febriandi.agrojaya.screens.login.LoginViewModel
@@ -136,6 +137,23 @@ fun AgrojayaApp(
 
         composable("kebijakanprivasi") {
             KebijakanPrivasiScreen(rootNavController = navController)
+        }
+
+        composable(
+            route = "hasilPencarian/{searchQuery}",
+            arguments = listOf(
+                navArgument("searchQuery") {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val searchQuery = backStackEntry.arguments?.getString("searchQuery") ?: ""
+            SearchResultScreen(
+                navController = navController,
+                rootNavController = navController,
+                searchQuery = searchQuery
+            )
         }
 
         composable("kontakKami") {

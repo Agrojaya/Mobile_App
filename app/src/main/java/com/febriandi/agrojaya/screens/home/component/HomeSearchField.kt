@@ -5,16 +5,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.febriandi.agrojaya.R
@@ -23,11 +33,12 @@ import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 @Composable
 fun HomeSearchField(
     search: String,
-    onSearchChange: (String) -> Unit
+    onSearchChange: (String) -> Unit,
+    onSearchClick: () -> Unit = {}
 ) {
     OutlinedTextField(
         value = search,
-        onValueChange = onSearchChange,
+        onValueChange = { onSearchChange(it) },
         placeholder = {
             Text(
                 text = "Telusuri",
@@ -37,7 +48,7 @@ fun HomeSearchField(
         singleLine = true,
         shape = RoundedCornerShape(30.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = colorResource(id = R.color.green_500),
+            focusedBorderColor = colorResource(id = R.color.green_300),
             unfocusedBorderColor = colorResource(id = R.color.stroke_form),
             unfocusedContainerColor = colorResource(id = R.color.green_100),
             focusedContainerColor = colorResource(id = R.color.green_100)
@@ -52,9 +63,13 @@ fun HomeSearchField(
             .padding(vertical = 4.dp, horizontal = 20.dp)
             .height(50.dp),
         trailingIcon = {
-            IconButton(onClick = { /* Handle search action */ }) {
+            IconButton(onClick = {
+                if (search.isNotEmpty()) {
+                    onSearchClick()
+                }
+            }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.icon_search),
+                    imageVector = Icons.Default.Search,
                     contentDescription = "Pencarian",
                     tint = colorResource(id = R.color.text_color),
                     modifier = Modifier.size(30.dp)
