@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+//Modul depedensi injection untuk terhubung ke api dengan retrofit
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -26,11 +27,13 @@ object NetworkModule {
         }
     }
 
+    //Baseurl API data
     @Provides
     @Singleton
     @Named("BaseUrl")
     fun provideBaseUrl(): String = "https://api-agrojaya.febriandi.my.id/"
 
+    //Url API data wilayah Indonesia
     @Provides
     @Singleton
     @Named("LocationBaseUrl")

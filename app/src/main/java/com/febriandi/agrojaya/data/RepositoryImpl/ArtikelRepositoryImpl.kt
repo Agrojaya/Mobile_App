@@ -10,6 +10,7 @@ class ArtikelRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ): ArtikelRepository {
 
+    //Mendapatkan data artikel
     override suspend fun getArtikels(): Resource<List<ArtikelResponse>> {
         return try {
             val response = apiService.getArtikels()
@@ -19,6 +20,7 @@ class ArtikelRepositoryImpl @Inject constructor(
         }
     }
 
+    //Mendapatkan data artikel berdasarkan id
     override suspend fun getArtikelById(id: Int): Resource<ArtikelResponse> {
         return try {
             val response = apiService.getArtikel(id)

@@ -15,6 +15,7 @@ class AlamatRepositoryImpl @Inject constructor(
     private val alamatApiService: ApiService,
     private val firebaseAuth: FirebaseAuth
 ) : AlamatRepository {
+    //Menyimpan Alamat
     override suspend fun simpanAlamat(alamat: AlamatRequest): Result<BaseResponse> = try {
         val response = alamatApiService.simpanAlamat(alamat)
         if (response.isSuccessful) {
@@ -26,15 +27,18 @@ class AlamatRepositoryImpl @Inject constructor(
         Result.failure(e)
     }
 
+    //Mendapatkan alamat berdasarkan uid
     override suspend fun getAlamatByUid(): List<AlamatResponse> {
         val currentUid = firebaseAuth.currentUser?.uid
             ?: throw IllegalStateException("No user logged in")
         return alamatApiService.getAlamatsByUid(currentUid)
     }
 
+    //Mendapatkan alamat berdasarkan id
     override suspend fun getAlamatById(id: Int): AlamatResponse =
         alamatApiService.getAlamatById(id)
 
+    //Mengupdate data alamat
     override suspend fun updateAlamat(alamat: AlamatUpdateRequest): Result<BaseResponse> = try {
         val id = alamat.id ?: throw IllegalArgumentException("ID alamat harus disertakan")
 

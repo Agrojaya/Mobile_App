@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.model
 
+//Googel User
 data class GoogleUser(
     val uid: String,
     val email: String,

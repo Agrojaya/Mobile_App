@@ -16,6 +16,8 @@ class TransaksiRepositoryImpl @Inject constructor(
     private val transaksiApiService: ApiService,
     private val firebaseAuth: FirebaseAuth
 ) : TransaksiRepository {
+
+    //Menyimpan data transaksi
     override suspend fun simpanTransaksi(transaksi: TransaksiRequest): Result<PaymentResponse> = try {
         val response = transaksiApiService.createTransaksi(transaksi)
         if (response.isSuccessful) {
@@ -27,12 +29,14 @@ class TransaksiRepositoryImpl @Inject constructor(
         Result.failure(e)
     }
 
+    //Mendapatkan data transaksi berdasarkan uid
     override suspend fun getTransaksisByUid(): List<TransaksiResponse> {
         val currentUid = firebaseAuth.currentUser?.uid
             ?: throw IllegalStateException("No user logged in")
         return transaksiApiService.getTransaksisByUid(currentUid)
     }
 
+    //Mendapatkan data transkasi bersarkan id
     override suspend fun getTransaksiById(order_id: String): Resource<TransaksiResponse> {
         return try {
             val response = transaksiApiService.getTransaksiById(order_id)
@@ -42,7 +46,7 @@ class TransaksiRepositoryImpl @Inject constructor(
         }
     }
 
-
+    //Mendapatkan status transaksi
     override suspend fun getStatusTransaksi(order_id: String): Resource<PaymentStatus> {
         return try {
             val response =  transaksiApiService.getStatusTransaksi(order_id)

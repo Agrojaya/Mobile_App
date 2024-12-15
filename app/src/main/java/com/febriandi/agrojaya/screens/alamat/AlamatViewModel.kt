@@ -25,6 +25,7 @@ class AlamatViewModel @Inject constructor(
         loadAlamat()
     }
 
+    //ViewModel Menampilkan alamat
     fun loadAlamat() {
         viewModelScope.launch {
             _alamatState.value = Resource.Loading

@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.model
 
+//Paket Response
 data class PaketResponse(
     val id: Int,
     val nama_paket: String,

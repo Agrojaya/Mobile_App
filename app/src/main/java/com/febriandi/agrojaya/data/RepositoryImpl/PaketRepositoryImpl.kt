@@ -10,6 +10,7 @@ class PaketRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ): PaketRepository {
 
+    //Mendapatkan data paket
     override suspend fun getPakets(): Resource<List<PaketResponse>> {
         return try {
             val response = apiService.getPakets()
@@ -19,6 +20,7 @@ class PaketRepositoryImpl @Inject constructor(
         }
     }
 
+    //Mendapatkan data paket berdasarkan id
     override suspend fun getPaketById(id: Int): Resource<PaketResponse> {
         return try {
             val response = apiService.getPaket(id)

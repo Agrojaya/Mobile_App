@@ -5,6 +5,7 @@ import com.febriandi.agrojaya.model.Kecamatan
 import com.febriandi.agrojaya.model.Kelurahan
 import com.febriandi.agrojaya.model.Provinsi
 
+//AlamatForm State
 data class AlamatFormState(
     val nama: String,
     val noHp: String,

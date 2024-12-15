@@ -11,6 +11,7 @@ class UserRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : UserRepository {
 
+    //Menyimpan data user yang melakukan register dengan email an password
     override suspend fun createUser(uid: String, username: String, email: String, fcmToken: String): Resource<User> {
         return try {
             val user = User(uid, username, email, fcmToken)
@@ -26,6 +27,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    //Mengupdate data FCMToken user di backend
     override suspend fun updateFCMToken(uid: String, token: String): Resource<Unit> {
         return try {
             val request = UpdateTokenRequest(token)

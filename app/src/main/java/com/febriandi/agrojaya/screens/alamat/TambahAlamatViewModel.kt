@@ -27,14 +27,12 @@ class TambahAlamatViewModel @Inject constructor(
     private val alamatRepository: AlamatRepository,
     private val locationRepository: LocationRepository
 ) : ViewModel() {
-    // State untuk proses submit
     private val _isSubmitting = MutableStateFlow(false)
     val isSubmitting: StateFlow<Boolean> = _isSubmitting.asStateFlow()
 
     private val _submitResult = MutableSharedFlow<Result<BaseResponse>>()
     val submitResult = _submitResult.asSharedFlow()
 
-    // State untuk data lokasi
     private val _provinsiList = MutableStateFlow<List<Provinsi>>(emptyList())
     val provinsiList: StateFlow<List<Provinsi>> = _provinsiList.asStateFlow()
 
@@ -60,6 +58,7 @@ class TambahAlamatViewModel @Inject constructor(
         loadProvinsi()
     }
 
+    //viewmodel simpan alamat
     fun simpanAlamat(
         nama: String,
         noHp: String,
@@ -101,6 +100,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel data provinsi
     fun loadProvinsi() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -111,6 +111,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel data kabupaten
     fun loadKabupaten(provinsiId: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -121,6 +122,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel data kecamatan
     fun loadKecamatan(kabupatenId: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -131,6 +133,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel data kelurahan
     fun loadKelurahan(kecamatanId: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -141,6 +144,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel data alamat by id
     fun loadAlamatById(id: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -161,6 +165,7 @@ class TambahAlamatViewModel @Inject constructor(
         }
     }
 
+    //viewmodel update alamat
     fun updateAlamat(
         id: Int,
         nama: String,

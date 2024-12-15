@@ -37,7 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.Pengingat
-import com.febriandi.agrojaya.screens.alamat.components.Header
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog

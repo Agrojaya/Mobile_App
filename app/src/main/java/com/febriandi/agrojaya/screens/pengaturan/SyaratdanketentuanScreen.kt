@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.screens.alamat.components.Header
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 @Composable

@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.model
 
+//Artikel Response
 data class ArtikelResponse(
     val id: Int,
     val judul: String,

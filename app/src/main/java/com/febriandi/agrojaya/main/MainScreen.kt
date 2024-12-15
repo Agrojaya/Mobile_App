@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavType
@@ -26,9 +25,9 @@ import com.febriandi.agrojaya.screens.profile.ProfileScreen
 import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) {
+fun MainScreen(rootNavController: NavController) {
     val navController = rememberNavController()
     val navItemList = listOf(
         NavItem("Beranda", R.drawable.icon_home),
@@ -117,23 +116,27 @@ fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) 
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
+            //Halaman Home
             composable("home") {
                 HomeScreen(
                     navController = navController,
                     rootNavController = rootNavController,
                 )
             }
+            //Halaman Paket
             composable("paket") {
                 PaketScreen(
                     navController = navController,
                     rootNavController = rootNavController
                 )
             }
+            //Halaman Profile
             composable("profile") {
                 ProfileScreen(
                     rootNavController = rootNavController,
                 )
             }
+            //Halaman Detail Artikel
             composable(
                 "detailArtikel/{artikelId}",
                 arguments = listOf(
@@ -151,11 +154,4 @@ fun MainScreen(rootNavController: NavController, modifier: Modifier = Modifier) 
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    val navController = rememberNavController()
-    MainScreen(rootNavController = navController)
 }

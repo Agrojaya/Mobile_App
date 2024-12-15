@@ -6,19 +6,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import android.widget.Toast
 import com.febriandi.agrojaya.model.*
-import com.febriandi.agrojaya.screens.alamat.components.Header
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.AlamatFormState
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.ErrorDialog
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.FormContent
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.LoadingOverlay
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.SubmitButton
 
+//Halama Update Alamat
 @Composable
 fun UpdateAlamatScreen(
     navController: NavController,
@@ -27,7 +26,6 @@ fun UpdateAlamatScreen(
 ) {
     val context = LocalContext.current
 
-    // State untuk formulir alamat
     var formState by remember {
         mutableStateOf(
             AlamatFormState(
@@ -43,11 +41,11 @@ fun UpdateAlamatScreen(
         )
     }
 
-    // UI States
+
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
-    // Collect states dari ViewModel
+
     val provinsiList by viewModel.provinsiList.collectAsState()
     val kabupatenList by viewModel.kabupatenList.collectAsState()
     val kecamatanList by viewModel.kecamatanList.collectAsState()
@@ -55,12 +53,12 @@ fun UpdateAlamatScreen(
     val isSubmitting by viewModel.isSubmitting.collectAsState()
     val existingAlamat by viewModel.existingAlamat.collectAsState()
 
-    // Muat data alamat saat komponen pertama kali dibuat
+
     LaunchedEffect(alamatId) {
         viewModel.loadAlamatById(alamatId)
     }
 
-    // Update form state ketika data alamat dimuat
+
     LaunchedEffect(existingAlamat) {
         existingAlamat?.let { alamat ->
             formState = AlamatFormState(
@@ -91,28 +89,20 @@ fun UpdateAlamatScreen(
         }
     }
 
-    // Tangani hasil submit
     LaunchedEffect(Unit) {
         viewModel.submitResult.collect { result ->
             result.fold(
                 onSuccess = { response ->
                     if (response.success) {
-                        // Set flag di previousBackStackEntry
                         navController.previousBackStackEntry?.savedStateHandle?.set("alamat_updated", true)
-
-                        // Tampilkan Toast
                         Toast.makeText(context, "Alamat Berhasil diperbarui", Toast.LENGTH_SHORT).show()
-
-                        // Kembali ke layar sebelumnya
                         navController.popBackStack()
                     } else {
-                        // Pastikan pesan error tidak null
                         errorMessage = response.message ?: "Gagal memperbarui alamat"
                         showErrorDialog = true
                     }
                 },
                 onFailure = { exception ->
-                    // Pastikan pesan error tidak null
                     errorMessage = exception.message ?: "Terjadi kesalahan"
                     showErrorDialog = true
                 }
@@ -128,7 +118,7 @@ fun UpdateAlamatScreen(
         // Header
         Header(navController, title = "Perbarui Alamat")
 
-        // Konten Formulir
+        // Form Content
         FormContent(
             formState = formState,
             onFormStateChange = { formState = it },
@@ -199,11 +189,3 @@ fun UpdateAlamatScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun UpdateAlamatScreenPreview() {
-    UpdateAlamatScreen(
-        navController = rememberNavController(),
-        alamatId = 1
-    )
-}

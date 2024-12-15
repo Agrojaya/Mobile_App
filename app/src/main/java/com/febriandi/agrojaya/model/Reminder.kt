@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
+//Pengingat
 @Entity(tableName = "pengingat")
 data class Pengingat(
     @PrimaryKey(autoGenerate = true)

@@ -37,9 +37,9 @@ import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman Alamat Screen
 @Composable
 fun AlamatScreen(
-    modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: AlamatViewModel = hiltViewModel()
 ){
@@ -56,7 +56,6 @@ fun AlamatScreen(
     LaunchedEffect(alamatUpdatedFlag) {
         if (alamatUpdatedFlag) {
             viewModel.loadAlamat()
-            // Reset flag
             navController.currentBackStackEntry
                 ?.savedStateHandle
                 ?.set("alamat_updated", false)
@@ -66,7 +65,6 @@ fun AlamatScreen(
     LaunchedEffect(alamatAddedFlag) {
         if (alamatAddedFlag) {
             viewModel.loadAlamat()
-            // Reset flag
             navController.currentBackStackEntry
                 ?.savedStateHandle
                 ?.set("alamat_added", false)

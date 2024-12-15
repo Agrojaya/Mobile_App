@@ -10,6 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
+//AgroJayaApplication
 @HiltAndroidApp
 class AgroJayaApplication : Application() {
 

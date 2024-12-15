@@ -1,5 +1,6 @@
 package com.febriandi.agrojaya.model
 
+//Transaksi Request
 data class TransaksiRequest(
     val uid: String,
     val nama_pengguna: String,
@@ -11,12 +12,14 @@ data class TransaksiRequest(
     val variasi_bibit: String
 )
 
+//Payment Response
 data class PaymentResponse(
     val success: Boolean,
     val msg: String,
     val data: TransaksiResponse
 )
 
+//Transaksi Response
 data class TransaksiResponse(
     val id: Int,
     val order_id: String,
@@ -42,6 +45,7 @@ data class TransaksiResponse(
     val catatan: String
 )
 
+//Payment Status
 data class PaymentStatus(
     val order_id: String,
     val gross_amount : String,

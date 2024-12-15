@@ -10,6 +10,7 @@ import com.febriandi.agrojaya.model.Pengingat
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
+//Menyimpan data pengingat di room
 @Dao
 interface PengingatDao {
     @Query("SELECT * FROM pengingat WHERE tanggal = :tanggal")

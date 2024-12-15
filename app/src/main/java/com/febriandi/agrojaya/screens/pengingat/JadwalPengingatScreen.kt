@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import com.febriandi.agrojaya.screens.alamat.components.Header
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.screens.pengingat.component.AktivitasListScreen
 import com.febriandi.agrojaya.screens.pengingat.component.HorizontalCalendarView
 import java.time.LocalDate

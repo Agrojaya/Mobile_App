@@ -38,6 +38,7 @@ class ProfileRepositoryImpl @Inject constructor(
         return firebaseAuth.currentUser?.uid ?: throw Exception("User not logged in")
     }
 
+    //Mengupdate data profile
     override suspend fun updateProfile(
         username: String,
         phoneNumber: String
@@ -71,6 +72,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 phoneNumber.matches(Regex("^\\+?\\d{10,14}$"))
     }
 
+    //Menyimpan photo profile di Data Store
     override suspend fun saveProfilePhoto(uri: String): Result<String?> {
         return try {
             val parsedUri = Uri.parse(uri)
@@ -99,6 +101,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
+    //Mendapatkan data photo profile
     override suspend fun getProfilePhoto(): Flow<String?> {
         return dataStore.data.map { preferences ->
             val photoPath = preferences[PROFILE_PHOTO_KEY]
@@ -116,7 +119,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-
+    //Mendapatkan data user berdasarkan uid
     override suspend fun getUserById(id: String): Resource<UserResponse> {
         return try {
             val response = apiService.getUserById(id)

@@ -6,6 +6,7 @@ import com.febriandi.agrojaya.model.TransaksiRequest
 import com.febriandi.agrojaya.model.TransaksiResponse
 import com.febriandi.agrojaya.utils.Resource
 
+//TransaksiRepository
 interface TransaksiRepository {
     suspend fun simpanTransaksi(transaksi: TransaksiRequest): Result<PaymentResponse>
     suspend fun getTransaksisByUid(): List<TransaksiResponse>

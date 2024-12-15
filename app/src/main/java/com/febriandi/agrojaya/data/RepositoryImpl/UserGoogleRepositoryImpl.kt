@@ -9,6 +9,7 @@ import javax.inject.Inject
 class UserGoogleRepositoryImpl @Inject constructor(
     private  val apiService: ApiService
 ) : UserGoogleRepository {
+    //Menyimpan data user yang login dengan google
     override suspend fun saveGoogleUser(uid: String, email: String, username: String, fcmToken: String): Resource<GoogleUser> {
         return try {
             val user = GoogleUser(uid = uid, email = email, username = username, fcmToken = fcmToken)

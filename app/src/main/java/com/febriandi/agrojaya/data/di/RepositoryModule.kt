@@ -14,6 +14,7 @@ import com.febriandi.agrojaya.data.RepositoryImpl.NotificationRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.PengingatRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.ProfileRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.TransaksiRepositoryImpl
+import com.febriandi.agrojaya.data.RepositoryImpl.UserGoogleRepositoryImpl
 import com.febriandi.agrojaya.data.dao.PengingatDao
 import com.febriandi.agrojaya.data.database.PengingatDatabase
 import com.febriandi.agrojaya.data.remote.ApiService
@@ -28,6 +29,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+//Repository Module Depedensi Injection
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
@@ -49,6 +51,13 @@ abstract class RepositoryModule {
     abstract fun bindAlamatRepository(
         alamatRepositoryImpl: AlamatRepositoryImpl
     ): AlamatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        userGoogleRepositoryImpl: UserGoogleRepositoryImpl
+    ): UserGoogleRepository
+
 
     @Binds
     @Singleton

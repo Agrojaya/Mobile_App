@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.febriandi.agrojaya.R
 
+//Component Button Back
 @Composable
 fun ButtonBack(
     backgroundColor: Color = colorResource(id = R.color.green_400),
@@ -37,10 +37,3 @@ fun ButtonBack(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ButtonBackPreview() {
-    ButtonBack {
-        // Tindakan ketika button diklik
-    }
-}

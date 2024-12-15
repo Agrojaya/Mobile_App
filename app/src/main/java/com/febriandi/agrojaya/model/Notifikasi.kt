@@ -2,14 +2,7 @@ package com.febriandi.agrojaya.model
 
 import java.util.UUID
 
-
-data class Notifikasi(
-    val id: Int,
-    val judul: String,
-    val pesan: String,
-    val tanggal: String,
-)
-
+//Notifikasi
 data class NotificationModel(
     val id: String = UUID.randomUUID().toString(),
     val title: String? = null,

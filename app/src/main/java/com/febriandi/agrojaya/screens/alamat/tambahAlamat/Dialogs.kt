@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.febriandi.agrojaya.R
 
+//Eror Dialog
 @Composable
 fun ErrorDialog(
     message: String,
@@ -31,6 +32,7 @@ fun ErrorDialog(
     )
 }
 
+//Loading Overlay
 @Composable
 fun LoadingOverlay() {
     Box(

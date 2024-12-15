@@ -5,6 +5,7 @@ import com.febriandi.agrojaya.model.Kecamatan
 import com.febriandi.agrojaya.model.Kelurahan
 import com.febriandi.agrojaya.model.Provinsi
 
+//LocationRepository
 interface LocationRepository {
     suspend fun getProvinsi(): Result<List<Provinsi>>
     suspend fun getKabupaten(provinsiId: String): Result<List<Kabupaten>>

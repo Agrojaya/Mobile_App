@@ -1,8 +1,12 @@
 package com.febriandi.agrojaya.main
 
+/**
+ * Kelas utama untuk mengatur navigasi di aplikasi Agrojaya.
+ * Menggunakan Jetpack Compose Navigation untuk memfasilitasi navigasi antar halaman.
+ */
+
 import JadwalAktivitasScreen
 import TambahAlamat
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,7 +50,7 @@ fun AgrojayaApp(
     val isLoggedIn by viewModel.isUserLoggedIn.collectAsState()
     val navController = rememberNavController()
 
-    // Handle navigation based on login state
+// Jika pengguna sudah login, langsung navigasi ke "mainScreen"
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn) {
             navController.navigate("mainScreen") {
@@ -55,10 +59,13 @@ fun AgrojayaApp(
         }
     }
 
+    // Deklarasi NavHost untuk mengatur navigasi
     NavHost(
         navController = navController,
         startDestination = "onboarding"
     ) {
+
+        //Halaman Onboarding
         composable("onboarding") {
             OnboardingScreen(onFinished = {
                 navController.navigate("afterOnboarding") {
@@ -67,6 +74,96 @@ fun AgrojayaApp(
             })
         }
 
+
+        //Halaman Login
+        composable("login") {
+            LoginScreen(navController)
+        }
+
+        //Halaman Register
+        composable("register") {
+            RegisterScreen(navController)
+        }
+
+        //Halaman Main Screen
+        composable("mainScreen") {
+            MainScreen(rootNavController = navController)
+        }
+
+        //Halaman Kontak Kami
+        composable("kontakKami") {
+            KontakKamiScreen(rootNavController = navController, context = LocalContext.current)
+        }
+
+        //Halaman Artikel
+        composable("artikel") {
+            ArtikelScreen(navController)
+        }
+
+
+        //Halaman alamat
+        composable("alamat") {
+            AlamatScreen(navController = navController)
+        }
+
+        //Halaman Daftar Transaksi
+        composable("daftarTransaksi") {
+            DaftarTransaksiScreen(
+                navController = navController)
+        }
+
+        //Halaman Tambah alamat
+        composable("tambahAlamat") {
+            TambahAlamat(navController = navController)
+        }
+
+        //Halaman Ganti Password
+        composable("gantiPassword") {
+            GantiPasswordScreen(navController = navController)
+        }
+
+        //Halaman Edit Profile
+        composable("editProfile") {
+            EditProfileScreen(navController = navController)
+        }
+
+        //Halaman Lupa Password
+        composable("lupaPassword") {
+            ForgotPasswordScreen(navController = navController,
+                onResetSuccess = {navController.popBackStack()})
+        }
+
+        //Halaman Setelah Onboarding
+        composable("afterOnboarding") {
+            AfterOnboarding(navController)
+        }
+
+        //Halaman Notifikasi
+        composable("notifikasi") {
+            NotifikasiScreen(navController = navController)
+        }
+
+        //Halaman Tambah Pengingat
+        composable("tambahPengingat") {
+            TambahPengingatScreen(navController = navController)
+        }
+
+        //Halaman Jadwal aktivitas
+        composable("jadwalAktivitas") {
+            JadwalAktivitasScreen(navController = navController)
+        }
+
+        //Halaman Syarat dan Ketentuan
+        composable("syaratdanketentuan") {
+            SyaratDanKetentuanScreen(rootNavController = navController)
+        }
+
+        //Halaman Kebijakan Privasi
+        composable("kebijakanprivasi") {
+            KebijakanPrivasiScreen(rootNavController = navController)
+        }
+
+        //Halaman Pemesanan
         composable(
             route = "pemesanan/{paketId}",
             arguments = listOf(
@@ -83,6 +180,7 @@ fun AgrojayaApp(
             )
         }
 
+        //Halaman Web View Pembayaran
         composable(
             route = "payment-webview/{paymentUrl}/{orderId}",
             arguments = listOf(
@@ -104,18 +202,8 @@ fun AgrojayaApp(
                     orderId = orderId
                 )
         }
-        composable("afterOnboarding") {
-            AfterOnboarding(navController)
-        }
 
-        composable("notifikasi") {
-            NotifikasiScreen(navController = navController)
-        }
-
-        composable("tambahPengingat") {
-            TambahPengingatScreen(navController = navController)
-        }
-
+        //Halaman Update Pengingat
         composable(
             "tambahPengingat/{pengingatId}",
             arguments = listOf(navArgument("pengingatId") { type = NavType.IntType })
@@ -127,18 +215,7 @@ fun AgrojayaApp(
             )
         }
 
-        composable("jadwalAktivitas") {
-            JadwalAktivitasScreen(navController = navController)
-        }
-
-        composable("syaratdanketentuan") {
-            SyaratDanKetentuanScreen(rootNavController = navController)
-        }
-
-        composable("kebijakanprivasi") {
-            KebijakanPrivasiScreen(rootNavController = navController)
-        }
-
+        //Halaman Hasil Pencarian
         composable(
             route = "hasilPencarian/{searchQuery}",
             arguments = listOf(
@@ -156,41 +233,7 @@ fun AgrojayaApp(
             )
         }
 
-        composable("kontakKami") {
-            KontakKamiScreen(rootNavController = navController, context = LocalContext.current)
-        }
-
-        composable("artikel") {
-            ArtikelScreen(navController)
-        }
-
-
-        composable("alamat") {
-            AlamatScreen(navController = navController)
-        }
-
-        composable("daftarTransaksi") {
-            DaftarTransaksiScreen(
-                navController = navController)
-        }
-
-        composable("tambahAlamat") {
-            TambahAlamat(navController = navController)
-        }
-
-        composable("gantiPassword") {
-            GantiPasswordScreen(navController = navController)
-        }
-
-        composable("editProfile") {
-            EditProfileScreen(navController = navController)
-        }
-
-        composable("lupaPassword") {
-            ForgotPasswordScreen(navController = navController,
-                onResetSuccess = {navController.popBackStack()})
-        }
-
+        //Halaman Detail Artikel
         composable(
             "detailArtikel/{artikelId}",
             arguments = listOf(
@@ -207,6 +250,7 @@ fun AgrojayaApp(
             )
         }
 
+        //Halaman Status Transaksi
         composable(
             "transaksi/{orderId}",
             arguments = listOf(
@@ -223,6 +267,7 @@ fun AgrojayaApp(
             )
         }
 
+        //Halaman Detail Transaksi
         composable(
             "detailTransaksi/{orderId}",
             arguments = listOf(
@@ -238,6 +283,7 @@ fun AgrojayaApp(
             )
         }
 
+        //Halaman Ubah Alamat
         composable(
             "ubahAlamat/{alamatId}",
             arguments = listOf(
@@ -255,18 +301,7 @@ fun AgrojayaApp(
             }
         }
 
-        composable("login") {
-            LoginScreen(navController)
-        }
-
-        composable("register") {
-            RegisterScreen(navController)
-        }
-
-        composable("mainScreen") {
-            MainScreen(rootNavController = navController)
-        }
-
+        //Halaman Detail Paket
         composable(
             "detailPaket/{paketId}",
             arguments = listOf(

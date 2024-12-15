@@ -20,6 +20,7 @@ import com.febriandi.agrojaya.component.ButtonComponent
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.model.AlamatResponse
 
+//Alamat Item
 @Composable
 fun AlamatItem(
     alamat: AlamatResponse,
@@ -108,7 +109,6 @@ fun AlamatItem(
 @Preview(showBackground = true)
 @Composable
 fun AlamatItemPreview() {
-    // Create a sample AlamatResponse for preview
     val sampleAlamat = AlamatResponse(
         id = 1,
         uid = "wjwjwjwjjw",

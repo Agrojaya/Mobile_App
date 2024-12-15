@@ -18,6 +18,8 @@ class NotificationRepositoryImpl @Inject constructor(
     private val database: FirebaseDatabase,
     private val firebaseAuth: FirebaseAuth
 ) : NotificationRepository {
+
+    //Mendapatkan data notifikasi
     override fun getNotifications(uid: String): Flow<Resource<List<NotificationModel>>> = callbackFlow {
 
         trySend(Resource.Loading)
@@ -40,6 +42,7 @@ class NotificationRepositoryImpl @Inject constructor(
         awaitClose { reference.removeEventListener(listener) }
     }
 
+    //Mengahapus data notifikasi berdasarkan id
     override suspend fun deleteNotification(notificationId: String): Resource<Unit> {
         return try {
             val currentUser = firebaseAuth.currentUser
@@ -59,6 +62,7 @@ class NotificationRepositoryImpl @Inject constructor(
         }
     }
 
+    //Menghapus semua data notifikasi
     override suspend fun deleteAllNotifications(): Resource<Unit> {
         return try {
             val currentUser = firebaseAuth.currentUser

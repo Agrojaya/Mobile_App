@@ -5,6 +5,7 @@ import com.febriandi.agrojaya.model.UserResponse
 import com.febriandi.agrojaya.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
+//Profile Repository
 interface ProfileRepository {
     suspend fun getCurrentUserId(): String
     suspend fun updateProfile(

@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//FirebaseMessagingService
 @AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -26,13 +27,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
+    //Menerima notifikasi dari firebase
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-
-        // Logging informasi lengkap tentang pesan
         Log.d("FCM_MESSAGE", "From: ${remoteMessage.from}")
 
-        // Log data tambahan jika ada
         remoteMessage.data.isNotEmpty().let {
             Log.d("FCM_MESSAGE", "Message data payload: ${remoteMessage.data}")
         }
@@ -41,7 +40,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val title = message.title ?: "Judul Kosong"
             val body = message.body ?: "Isi Pesan Kosong"
 
-            // Log detail notifikasi
+
             Log.d("FCM_MESSAGE", "Notification Title: $title")
             Log.d("FCM_MESSAGE", "Notification Body: $body")
 
@@ -49,6 +48,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    //Menampilkan notifikasi dari firebase
     private fun showNotification(title: String, body: String) {
         val channelId = "FCM_CHANNEL"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -70,14 +70,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Log sebelum menampilkan notifikasi
+
         Log.d("FCM_MESSAGE", "Showing notification with title: $title")
         notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
     }
 
+    //Menyimpan FCM Token ke backend
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // Log token baru
         Log.d("FCM_TOKEN", "New token generated: $token")
 
         val currentUser = firebaseAuth.currentUser

@@ -4,6 +4,7 @@ import com.febriandi.agrojaya.model.Pengingat
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
+//PengingatRepository
 interface PengingatRepository {
     fun getDaftarPengingatByTanggal(tanggal: LocalDate): Flow<List<Pengingat>>
     suspend fun tambahPengingat(pengingat: Pengingat)

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +19,7 @@ import com.febriandi.agrojaya.model.Kelurahan
 import com.febriandi.agrojaya.model.Provinsi
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Form Content
 @Composable
 fun FormContent(
     formState: AlamatFormState,
