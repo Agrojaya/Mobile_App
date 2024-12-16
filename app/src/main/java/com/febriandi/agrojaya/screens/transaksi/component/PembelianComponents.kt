@@ -37,6 +37,7 @@ import com.febriandi.agrojaya.screens.transaksi.viewmodel.TransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//section alamat
 @Composable
 fun PembelianAlamatSection(
     navController: NavController,
@@ -144,6 +145,7 @@ fun PembelianAlamatSection(
     }
 }
 
+//section detail paket
 @Composable
 fun PembelianPaketDetails(paket: PaketResponse) {
     Text(
@@ -182,7 +184,7 @@ fun PembelianPaketDetails(paket: PaketResponse) {
     }
 }
 
-
+//section varian bibit
 @Composable
 fun PembelianVarianBibitSelection(
     paket: PaketResponse,
@@ -191,7 +193,6 @@ fun PembelianVarianBibitSelection(
 ) {
     val context = LocalContext.current
 
-    // Menentukan batas maksimal pilihan berdasarkan nama paket
     val maxSelection = when {
         paket.nama_paket.contains("Dasar", ignoreCase = true) -> 1
         paket.nama_paket.contains("Menengah", ignoreCase = true) -> 3
@@ -253,6 +254,7 @@ fun PembelianVarianBibitSelection(
     }
 }
 
+//component button pembayaran
 @Composable
 fun PembelianBottomSection(
     paket: PaketResponse,

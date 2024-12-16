@@ -18,8 +18,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +30,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.component.ButtonComponent
 
-
+//Halaman webview payment
 @Composable
 fun PaymentWebViewScreen(
     navController: NavController,
@@ -55,7 +53,6 @@ fun PaymentWebViewScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // WebView full layar
         AndroidView(
             factory = { context ->
                 WebView(context).apply {
@@ -87,7 +84,6 @@ fun PaymentWebViewScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Loading Indicator
         if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -97,7 +93,6 @@ fun PaymentWebViewScreen(
             }
         }
 
-        // Error Message
         if (hasError) {
             Box(
                 modifier = Modifier.fillMaxSize(),

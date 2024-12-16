@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//view model paket
 @HiltViewModel
 class PaketViewModel @Inject constructor(
     private val repository: PaketRepository
@@ -25,6 +26,7 @@ class PaketViewModel @Inject constructor(
         loadPakets()
     }
 
+    //mendapatkan data semua paket
     fun loadPakets() {
         viewModelScope.launch {
             _paketState.value = Resource.Loading
@@ -33,7 +35,7 @@ class PaketViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         originalPakets = result.data
-                        _paketState.value = result // Update the state with the successful result
+                        _paketState.value = result
                     }
                     is Resource.Error -> {
                         _paketState.value = Resource.Error(result.message ?: "Terjadi Kesalahan")

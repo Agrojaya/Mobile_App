@@ -21,6 +21,7 @@ import com.febriandi.agrojaya.screens.transaksi.viewmodel.TransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Pembelian screen content
 @Composable
 fun PembelianScreenContent(
     paketState: Resource<PaketResponse>,
@@ -82,6 +83,7 @@ fun PembelianScreenContent(
     }
 }
 
+//Detail pembelian content
 @Composable
 private fun PembelianDetailContent(
     paket: PaketResponse,

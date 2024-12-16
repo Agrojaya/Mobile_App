@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//view model notifikasi
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val repository: NotificationRepository,

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//Detail Artikel View model
 @HiltViewModel
 class DetailArtikelViewModel @Inject constructor(
     private val repository: ArtikelRepository
@@ -18,6 +19,7 @@ class DetailArtikelViewModel @Inject constructor(
     private val _artikelState = MutableStateFlow<Resource<ArtikelResponse>>(Resource.Loading)
     val artikelState: StateFlow<Resource<ArtikelResponse>> = _artikelState
 
+    //viewmodel menampilkan artikel berdasarkan id
     fun loadArtikel(id: Int) {
         viewModelScope.launch {
             _artikelState.value = Resource.Loading

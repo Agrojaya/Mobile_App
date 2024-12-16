@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman Paket Screen
 @Composable
 fun PaketScreen(
     navController: NavController,
@@ -34,7 +34,6 @@ fun PaketScreen(
 ) {
     val paketState by viewModel.paketState.collectAsState()
 
-    // Add LaunchedEffect to reload data when screen is shown
     LaunchedEffect(key1 = Unit) {
         viewModel.loadPakets()
     }

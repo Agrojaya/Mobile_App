@@ -25,11 +25,10 @@ import com.febriandi.agrojaya.screens.home.component.HomeSearchField
 import com.febriandi.agrojaya.screens.home.component.HomeScheduleSection
 import com.febriandi.agrojaya.screens.pengingat.PengingatViewModel
 import com.febriandi.agrojaya.utils.Resource
-import kotlinx.coroutines.delay
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman Home Screen
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -148,10 +147,11 @@ fun HomeScreen(
             Column(
                 modifier = Modifier.background(Color.White)
             ) {
+                //Home Header
                 HomeHeader(
                     rootNavController = rootNavController
                 )
-
+                //Pencarian
                 HomeSearchField(
                     search = search,
                     onSearchChange = { search = it },

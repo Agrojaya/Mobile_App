@@ -25,7 +25,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,7 @@ data class CalendarDate(
     val isSelected: Boolean = false
 )
 
-
+//component horizontal calender
 @Composable
 fun HorizontalCalendarView(
     navController: NavController,
@@ -59,7 +58,6 @@ fun HorizontalCalendarView(
     var currentYearMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     val scrollState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
     val dates = remember(currentYearMonth) {
         val daysInMonth = currentYearMonth.lengthOfMonth()
@@ -100,7 +98,7 @@ fun HorizontalCalendarView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${today.dayOfMonth}", // Dynamic tanggal
+                    text = "${today.dayOfMonth}",
                     fontSize = 60.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = CustomFontFamily,

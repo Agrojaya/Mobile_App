@@ -1,6 +1,5 @@
 package com.febriandi.agrojaya.screens.pengingat
 
-import android.icu.text.SimpleDateFormat
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,9 +45,8 @@ import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-
+//Halaman tambah dan update pengingat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TambahPengingatScreen(
@@ -63,14 +61,13 @@ fun TambahPengingatScreen(
 
     val selectedPengingat by viewModel.selectedPengingat.collectAsState()
 
-    // Use LaunchedEffect to get Pengingat by ID
+
     LaunchedEffect(pengingatId) {
         pengingatId?.let {
             viewModel.getPengingatById(it)
         }
     }
 
-    // Update fields when selectedPengingat changes
     LaunchedEffect(selectedPengingat) {
         selectedPengingat?.let { pengingat ->
             catatan.value = pengingat.catatan
@@ -119,7 +116,6 @@ fun TambahPengingatScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Catatan TextField
                 OutlinedTextField(
                     textStyle = TextStyle(
                         fontFamily = CustomFontFamily,
@@ -140,12 +136,10 @@ fun TambahPengingatScreen(
                     )
                 )
 
-                // Date and Time Display
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Date Display
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -163,7 +157,6 @@ fun TambahPengingatScreen(
                         )
                     }
 
-                    // Time Display
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -182,7 +175,6 @@ fun TambahPengingatScreen(
                     }
                 }
 
-                // Date and Time Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -209,7 +201,6 @@ fun TambahPengingatScreen(
                     }
                 }
 
-                // Simpan Button
                 Button(
                     onClick = {
                         if (catatan.value.isNotEmpty() &&

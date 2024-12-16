@@ -11,6 +11,7 @@ import com.febriandi.agrojaya.screens.alamat.AlamatViewModel
 import com.febriandi.agrojaya.screens.Paket.DetailPaketViewModel
 import com.febriandi.agrojaya.screens.transaksi.component.PembelianScreenContent
 
+//Halaman Pembelian Screen
 @Composable
 fun PembelianScreen(
     navController: NavController,

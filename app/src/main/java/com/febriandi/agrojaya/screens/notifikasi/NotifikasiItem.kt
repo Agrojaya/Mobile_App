@@ -1,7 +1,6 @@
 package com.febriandi.agrojaya.screens.notifikasi
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+//Notifikasi item
 @Composable
 fun NotifikasiItem(
     notifikasi: NotificationModel,
@@ -68,7 +68,7 @@ fun NotifikasiItem(
     }
 }
 
-// Perbarui fungsi format waktu untuk menangani null
+
 fun formatWaktu(waktu: Long): String {
     return try {
         val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())

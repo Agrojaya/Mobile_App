@@ -33,6 +33,7 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Halaman Kontak Kami
 @Composable
 fun KontakKamiScreen(
     rootNavController: NavController,
@@ -52,10 +53,9 @@ fun KontakKamiScreen(
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // Telepon
             ContactBox(
                 context = context,
-                icon = painterResource(id = R.drawable.icon_telepon),
+                icon = painterResource(id = R.drawable.call),
                 title = "Telepon",
                 value = "085162598308",
                 onClick = {
@@ -65,7 +65,6 @@ fun KontakKamiScreen(
                 }
             )
 
-            // WhatsApp
             ContactBox(
                 context = context,
                 icon = painterResource(id = R.drawable.icon_wa),
@@ -79,7 +78,6 @@ fun KontakKamiScreen(
                 }
             )
 
-            // Email
             ContactBox(
                 context = context,
                 icon = painterResource(id = R.drawable.icon_email),
@@ -107,8 +105,8 @@ fun ContactBox(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .background(colorResource(id = R.color.green_100))
-            .clip(RoundedCornerShape(10.dp)),
+            .clip(RoundedCornerShape(10.dp))
+            .background(colorResource(id = R.color.green_100)),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(

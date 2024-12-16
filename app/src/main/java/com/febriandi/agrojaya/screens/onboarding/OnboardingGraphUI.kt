@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import com.febriandi.agrojaya.R
 
+//component onboarding
 @Composable
 fun OnboardingGraphUI(onboardingModel: OnboardingModel) {
     Column (modifier = Modifier.fillMaxWidth()) {

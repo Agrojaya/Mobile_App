@@ -14,13 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,8 +47,7 @@ import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman Register
 @Composable
 fun RegisterScreen(
     navController: NavController,
@@ -59,7 +56,6 @@ fun RegisterScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState(initial = null)
-    val googleLoginState = viewModel.stateGoogle.value
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -301,7 +297,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "Login Sekarang",
-                color = colorResource(id = R.color.green_400), // Green color for the register link
+                color = colorResource(id = R.color.green_400),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 fontFamily = CustomFontFamily,

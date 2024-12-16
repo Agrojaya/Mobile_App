@@ -1,7 +1,6 @@
 package com.febriandi.agrojaya.screens.home.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -9,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
@@ -26,6 +24,7 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
+//Component aktivitas home
 @Composable
 fun HomeAktivitasComponent(
     viewModel: PengingatViewModel,

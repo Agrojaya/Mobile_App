@@ -20,15 +20,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ArtikelScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
     viewModel: ArtikelViewModel = hiltViewModel()
 ) {
     val artikelState by viewModel.artikelState.collectAsState()
@@ -39,25 +39,7 @@ fun ArtikelScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Header with back button
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp, horizontal = 20.dp)
-        ) {
-            ButtonBack {
-                navController.popBackStack()
-            }
-            Text(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                text = "Artikel",
-                fontSize = 16.sp,
-                fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.SemiBold,
-                color = colorResource(id = R.color.text_color)
-            )
-        }
+        Header(navController, title = "Artikel")
 
         // Search section
         Column(

@@ -20,6 +20,7 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Halaman Kebijakan privasi
 @Composable
 fun KebijakanPrivasiScreen(
     rootNavController: NavController
@@ -29,7 +30,6 @@ fun KebijakanPrivasiScreen(
     val termsText = buildAnnotatedString {
         append("Kami di Agrojaya berkomitmen untuk melindungi dan menghormati privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi Anda saat menggunakan aplikasi Agrojaya, yang menyediakan jasa pemasangan urban farming. \n\n")
 
-        // Sections with styled headers
         sections.forEach { (header, content) ->
             withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                 append("$header\n")
@@ -37,7 +37,6 @@ fun KebijakanPrivasiScreen(
             append("$content\n\n")
         }
 
-        // Closing statement
         append("\nDengan menggunakan aplikasi Agrojaya, Anda menyetujui pengumpulan dan penggunaan data sesuai dengan Kebijakan Privasi ini.")
     }
 

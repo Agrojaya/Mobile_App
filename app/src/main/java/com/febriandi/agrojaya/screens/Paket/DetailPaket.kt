@@ -28,10 +28,12 @@ import coil.request.ImageRequest
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman Detail Paket
 @Composable
 fun DetailPaketScreen(
     navController: NavController,
@@ -63,9 +65,7 @@ fun DetailPaketScreen(
                     onItemClicked = {
                         navController.navigate("pemesanan/$paketId")
                     },
-                    onBackClick = {
-                        navController.navigateUp()
-                    }
+                    navController = navController
                 )
             }
             is Resource.Error -> {
@@ -99,25 +99,22 @@ fun DetailPaketScreen(
     }
 }
 
+//Detail paket content
 @Composable
 private fun DetailPaketContent(
     paket: PaketResponse,
-    onBackClick: () -> Unit,
+    navController: NavController,
     onItemClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
 
-
-
-    // Convert variasi_bibit string to list
     val categories = paket.variasi_bibit
         .replace("\"", "")
         .split(",")
         .map { it.trim() }
 
-    // Split categories into two rows
     val firstRowCategories = categories.take(categories.size / 2 + categories.size % 2)
     val secondRowCategories = categories.drop(categories.size / 2 + categories.size % 2)
 
@@ -128,22 +125,7 @@ private fun DetailPaketContent(
                 .background(Color.White)
         ) {
             // Header
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
-            ) {
-                ButtonBack(onClick = onBackClick)
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Detail Paket",
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
+            Header(navController, "Detail Paket")
 
             Column(
                 modifier = Modifier
@@ -192,7 +174,7 @@ private fun DetailPaketContent(
                     color = colorResource(id = R.color.text_color)
                 )
 
-                // Categories container with synchronized horizontal scroll
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -200,7 +182,6 @@ private fun DetailPaketContent(
                         .horizontalScroll(horizontalScrollState)
                 ) {
                     Column {
-                        // First row of categories
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
@@ -213,7 +194,7 @@ private fun DetailPaketContent(
                             }
                         }
 
-                        // Second row of categories
+
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.padding(horizontal = 20.dp)
@@ -237,7 +218,6 @@ private fun DetailPaketContent(
                     color = colorResource(id = R.color.text_color)
                 )
 
-                // Convert fitur string to list and display with bullets
                 Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                     paket.fitur
                         .replace("\"", "")
@@ -290,6 +270,7 @@ private fun DetailPaketContent(
     }
 }
 
+//kategori item
 @Composable
 private fun CategoryItem(
     category: String,

@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
 
+//Notifikasi jadwal view model
 fun jadwalkanNotifikasi(context: Context, pengingat: Pengingat) {
 
     val waktuNotifikasi = LocalDateTime.of(

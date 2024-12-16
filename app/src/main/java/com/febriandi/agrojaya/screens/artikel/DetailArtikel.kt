@@ -3,7 +3,6 @@ package com.febriandi.agrojaya.screens.artikel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,15 +25,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman Detail Artikel
 @Composable
 fun DetailArtikelScreen(
     navController: NavController,
     rootNavController: NavController,
-    modifier: Modifier = Modifier,
     artikelId: Int?,
     viewModel: DetailArtikelViewModel = hiltViewModel()
 ) {
@@ -62,8 +61,7 @@ fun DetailArtikelScreen(
             is Resource.Success -> {
                 DetailArtikelContent(
                     artikel = state.data,
-                    onBackClick = { navController.navigateUp() }
-//                    onLikeClick = { viewModel.toggleLike(artikelId ?: 0) }
+                    navController
                 )
             }
             is Resource.Error -> {
@@ -100,8 +98,7 @@ fun DetailArtikelScreen(
 @Composable
 private fun DetailArtikelContent(
     artikel: ArtikelResponse,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    navController: NavController,
 ) {
     val scrollState = rememberScrollState()
     val paragraphs = remember(artikel.isi) {
@@ -132,25 +129,9 @@ private fun DetailArtikelContent(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            // Header with back button
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
-            ) {
-                ButtonBack(onClick = onBackClick)
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Detail Artikel",
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
 
-            // Scrollable content
+            Header(navController, title = "Detail Artikel")
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -201,7 +182,6 @@ private fun DetailArtikelContent(
                         modifier = Modifier.padding(
                             start = 20.dp,
                             end = 20.dp,
-                            // Add extra top padding for paragraphs after the first one
                             top = if (index == 0) 8.dp else 16.dp,
                             bottom = 8.dp
                         ),
@@ -218,25 +198,5 @@ private fun DetailArtikelContent(
                 }
             }
         }
-
-//        // Floating Like Button
-//        FloatingActionButton(
-//            onClick = onLikeClick,
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//                .padding(16.dp)
-//                .size(56.dp),
-//            shape = CircleShape,
-//            containerColor = colorResource(id = R.color.green_400)
-//        ) {
-//            Icon(
-//                painter = painterResource(
-//                    id = if (artikel.isLiked) R.drawable.icon_like_filled else R.drawable.icon_like
-//                ),
-//                contentDescription = "Like",
-//                tint = Color.White,
-//                modifier = Modifier.size(30.dp)
-//            )
-//        }
     }
 }

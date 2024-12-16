@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//viewmodel transaksi
 @HiltViewModel
 class TransaksiViewModel @Inject constructor(
     private val apiService: ApiService,
@@ -32,7 +33,6 @@ class TransaksiViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             try {
-                // Mendapatkan data user dari Firebase
                 val currentUser = firebaseAuth.currentUser
                 if (currentUser == null) {
                     _paymentState.value = Resource.Error("User tidak terautentikasi")

@@ -15,12 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -50,7 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman Login
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -217,7 +215,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "Daftar Sekarang",
-                color = colorResource(id = R.color.green_400), // Green color for the register link
+                color = colorResource(id = R.color.green_400),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 fontFamily = CustomFontFamily,
@@ -245,12 +243,4 @@ fun LoginScreen(
 
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    // Use rememberNavController to provide a NavController in the preview
-    val navController = rememberNavController()
-    LoginScreen(navController = navController)
 }

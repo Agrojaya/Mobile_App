@@ -1,3 +1,5 @@
+package com.febriandi.agrojaya.screens.pengingat
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -9,6 +11,7 @@ import com.febriandi.agrojaya.screens.pengingat.component.AktivitasListScreen
 import com.febriandi.agrojaya.screens.pengingat.component.HorizontalCalendarView
 import java.time.LocalDate
 
+//Halaman Jadwal Aktivitas
 @Composable
 fun JadwalAktivitasScreen(
     navController: NavController

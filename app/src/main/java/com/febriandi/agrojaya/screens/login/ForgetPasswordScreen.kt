@@ -2,7 +2,6 @@ package com.febriandi.agrojaya.screens.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -38,10 +33,11 @@ import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman Lupa password
 @Composable
 fun ForgotPasswordScreen(
     viewModel: ForgotPasswordViewModel = hiltViewModel(),
@@ -52,7 +48,6 @@ fun ForgotPasswordScreen(
     val resetPasswordState by viewModel.resetPasswordState.collectAsState()
     val context = LocalContext.current
 
-    // Tangani state reset password
     LaunchedEffect(resetPasswordState) {
         when (val state = resetPasswordState) {
             is Resource.Success -> {
@@ -87,24 +82,8 @@ fun ForgotPasswordScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                ) {
-                    ButtonBack{
-                        navController.popBackStack()
-                    }
-                    Text(
-                        text = "Lupa Kata Sandi",
-                        modifier = Modifier.padding(start = 16.dp),
-                        fontSize = 16.sp,
-                        fontFamily = CustomFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colorResource(id = R.color.text_color)
-                    )
-                }
+                //Header
+                Header(navController, title = "Lupa Kata Sandi")
 
                 // Deskripsi
                 Text(

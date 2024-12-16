@@ -1,9 +1,7 @@
 package com.febriandi.agrojaya.data.di
 
 import android.content.Context
-import androidx.hilt.work.HiltWorkerFactory
 import androidx.room.Room
-import androidx.work.WorkerFactory
 import com.febriandi.agrojaya.data.RepositoryImpl.AlamatRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.ArtikelRepositoryImpl
 import com.febriandi.agrojaya.data.RepositoryImpl.LocationRepositoryImpl

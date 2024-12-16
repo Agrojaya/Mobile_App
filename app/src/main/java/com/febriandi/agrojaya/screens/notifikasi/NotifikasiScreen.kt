@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
-import com.febriandi.agrojaya.model.NotificationModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 import kotlinx.coroutines.launch
@@ -37,7 +36,6 @@ fun NotifikasiScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Memulai pengambilan notifikasi
     LaunchedEffect(Unit) {
         viewModel.fetchNotifications()
     }
@@ -45,7 +43,6 @@ fun NotifikasiScreen(
     val notificationState by viewModel.notifications.collectAsState()
     val deleteStatus by viewModel.deleteStatus.collectAsState()
 
-    // Tangani status penghapusan
     LaunchedEffect(deleteStatus) {
         deleteStatus?.let { status ->
             when (status) {
@@ -89,7 +86,6 @@ fun NotifikasiScreen(
                 )
             }
 
-            // Tombol Hapus Semua
             IconButton(
                 onClick = {
                     scope.launch {
@@ -105,7 +101,6 @@ fun NotifikasiScreen(
             }
         }
 
-        // Konten notifikasi dengan penanganan status
         when (val resource = notificationState) {
             is Resource.Loading -> {
                 Box(

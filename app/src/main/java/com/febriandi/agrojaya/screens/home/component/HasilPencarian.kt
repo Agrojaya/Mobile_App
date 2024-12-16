@@ -21,7 +21,7 @@ import com.febriandi.agrojaya.screens.artikel.ArtikelItem
 import com.febriandi.agrojaya.screens.artikel.ArtikelViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman hasil pencarian
 @Composable
 fun SearchResultScreen(
     rootNavController: NavController,
@@ -40,7 +40,7 @@ fun SearchResultScreen(
         }
     }
 
-    // Log hasil pencarian
+
     LaunchedEffect(searchResultState) {
         Log.d("SearchResultScreen", "Search result count: ${searchResultState.size}")
     }
@@ -68,7 +68,6 @@ fun SearchResultScreen(
             }
         )
 
-        // Informasi pencarian
         Text(
             text = "Hasil pencarian untuk \"$search\"",
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
@@ -77,10 +76,9 @@ fun SearchResultScreen(
             color = colorResource(id = R.color.text_color)
         )
 
-        // Konten hasil pencarian
+
         when (searchResultState.isEmpty()) {
             true -> {
-                // Tampilan saat tidak ada hasil
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -111,7 +109,6 @@ fun SearchResultScreen(
                 }
             }
             false -> {
-                // Daftar artikel hasil pencarian
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {

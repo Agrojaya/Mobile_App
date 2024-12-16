@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +29,7 @@ import coil.compose.AsyncImage
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.model.UserResponse
 import com.febriandi.agrojaya.screens.profile.component.ProfileEvent
 import com.febriandi.agrojaya.screens.profile.component.UiEvent
@@ -37,6 +37,7 @@ import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 import kotlinx.coroutines.flow.collectLatest
 
+//Halaman Edit Profile
 @Composable
 fun EditProfileScreen(
     navController: NavController,
@@ -116,25 +117,7 @@ fun EditProfileScreen(
                 .background(Color.White)
                 .padding(paddingValues)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                ButtonBack {
-                    viewModel.cancelOngoingOperations()
-                    navController.popBackStack()
-                }
-                Text(
-                    text = "Edit Profile",
-                    modifier = Modifier.padding(start = 16.dp),
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
+            Header(navController, "Edit Profile")
 
             Box(
                 modifier = Modifier.fillMaxWidth()

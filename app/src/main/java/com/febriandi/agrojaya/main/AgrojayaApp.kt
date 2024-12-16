@@ -5,7 +5,6 @@ package com.febriandi.agrojaya.main
  * Menggunakan Jetpack Compose Navigation untuk memfasilitasi navigasi antar halaman.
  */
 
-import JadwalAktivitasScreen
 import TambahAlamat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +36,7 @@ import com.febriandi.agrojaya.screens.pembelian.PembelianScreen
 import com.febriandi.agrojaya.screens.pengaturan.KebijakanPrivasiScreen
 import com.febriandi.agrojaya.screens.pengaturan.KontakKamiScreen
 import com.febriandi.agrojaya.screens.pengaturan.SyaratDanKetentuanScreen
+import com.febriandi.agrojaya.screens.pengingat.JadwalAktivitasScreen
 import com.febriandi.agrojaya.screens.pengingat.TambahPengingatScreen
 import com.febriandi.agrojaya.screens.profile.EditProfileScreen
 import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen

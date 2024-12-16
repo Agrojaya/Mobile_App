@@ -3,6 +3,7 @@ package com.febriandi.agrojaya.screens.onboarding
 import androidx.annotation.DrawableRes
 import com.febriandi.agrojaya.R
 
+//onboarding model
 sealed class OnboardingModel(
     @DrawableRes val image: Int,
     val title: String,

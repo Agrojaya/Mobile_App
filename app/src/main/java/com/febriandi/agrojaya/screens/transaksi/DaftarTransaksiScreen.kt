@@ -31,11 +31,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.screens.transaksi.component.TransaksiItem
 import com.febriandi.agrojaya.screens.transaksi.viewmodel.DaftarTransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman daftar transaksi
 @Composable
 fun DaftarTransaksiScreen(
     modifier: Modifier = Modifier,
@@ -53,25 +55,7 @@ fun DaftarTransaksiScreen(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
     ){
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
-            ) {
-                ButtonBack {
-                    navController.navigateUp()
-                }
-                Text(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = "Pesanan Saya",
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-
-            }
+        Header(navController, "Pesanan Saya")
 
         Box(modifier = Modifier.fillMaxSize()) {
             when (val currentState = transaksiState) {

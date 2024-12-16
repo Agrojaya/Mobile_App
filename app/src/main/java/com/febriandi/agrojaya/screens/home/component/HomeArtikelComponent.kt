@@ -28,6 +28,7 @@ import com.febriandi.agrojaya.screens.artikel.ArtikelViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Artikel Header home
 @Composable
 fun HomeArtikelHeader(rootNavController: NavController) {
     Row(

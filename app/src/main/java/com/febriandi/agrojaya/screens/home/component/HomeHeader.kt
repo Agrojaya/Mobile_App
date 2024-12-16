@@ -41,6 +41,7 @@ import com.febriandi.agrojaya.screens.profile.ProfileViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Home Header component
 @Composable
 fun HomeHeader(
     profileViewModel: ProfileViewModel = hiltViewModel(),

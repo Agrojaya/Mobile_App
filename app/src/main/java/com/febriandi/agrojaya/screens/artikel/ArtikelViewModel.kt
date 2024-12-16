@@ -30,6 +30,7 @@ class ArtikelViewModel @Inject constructor(
         loadArtikels()
     }
 
+    //viewmodel mendapatkan data artikel
     fun loadArtikels() {
         viewModelScope.launch {
             _artikelState.value = Resource.Loading
@@ -45,6 +46,7 @@ class ArtikelViewModel @Inject constructor(
         }
     }
 
+    //viewmodel mencari artikel
     fun searchArtikelshome(query: String) {
         viewModelScope.launch {
             Log.d("ArtikelViewModel", "Searching with query: $query")
@@ -66,7 +68,7 @@ class ArtikelViewModel @Inject constructor(
                 }
             }
 
-            // Log detail setiap artikel untuk debugging
+
             artikelsToSearch.forEachIndexed { index, artikel ->
                 Log.d("ArtikelViewModel", "Artikel $index: Judul = ${artikel.judul}")
             }
@@ -87,6 +89,7 @@ class ArtikelViewModel @Inject constructor(
         }
     }
 
+    //viewmodel mencari artikel
     fun searchArtikels(query: String) {
         viewModelScope.launch {
             try {

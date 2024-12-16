@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//View model ganti password
 @HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository

@@ -1,7 +1,6 @@
 package com.febriandi.agrojaya.screens.transaksi.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -26,20 +25,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign.Companion.Justify
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.febriandi.agrojaya.R
-import com.febriandi.agrojaya.model.AlamatResponse
-import com.febriandi.agrojaya.model.ArtikelResponse
 import com.febriandi.agrojaya.model.TransaksiResponse
-import com.febriandi.agrojaya.screens.alamat.AlamatItem
-import com.febriandi.agrojaya.ui.theme.AgroJayaTheme
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Transaksi Item
 @Composable
 fun TransaksiItem(
     transaksi: TransaksiResponse,
@@ -90,7 +84,6 @@ fun TransaksiItem(
                     }
                 }
             }
-            // Article Content
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -181,42 +174,4 @@ fun TransaksiItem(
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun TransaksiItemPreview() {
-    val sampleTransaksi = TransaksiResponse(
-        id = 1,
-        order_id = "AGROJAYA88f0440b3-2a64-4c9f-8040-4d921323aa0d",
-        uid = "wjwjwjwjjw",
-        paket_id = 1,
-        alamat_id = 1,
-        total_harga = 500000,
-        variasi_bibit = "Sawi",
-        tanggal = "20/02/2024",
-        status_pembayaran = "Pending",
-        status_transaksi = "Sedang diproses",
-        snap_token = "aaaa",
-        snap_redirect_url = "aaaa",
-        nama_paket = "Paket Dasar",
-        photo_paket = "R.drawable.paket1",
-        nama_alamat = "Febriandi",
-        noHp = "082991829282",
-        alamatLengkap = "Griya Exotica Cinangka Blok M no.3",
-        kelurahan = "Cinangka",
-        kecamatan = "Sawangan",
-        kabupaten = "Kota Depok",
-        provinsi = "Jawa Barat",
-        catatan = "Lurus sampai ujung gang, baru belok kanan"
-    )
-
-    MaterialTheme {
-        TransaksiItem(
-            transaksi = sampleTransaksi,
-            onItemClicked = {}
-
-        )
-    }
-}
-
 

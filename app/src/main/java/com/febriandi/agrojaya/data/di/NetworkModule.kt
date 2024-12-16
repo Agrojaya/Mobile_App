@@ -2,6 +2,7 @@ package com.febriandi.agrojaya.data.di
 
 import com.febriandi.agrojaya.data.remote.ApiService
 import com.febriandi.agrojaya.data.remote.LocationApiService
+import com.febriandi.agrojaya.utils.Constant
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,13 +32,13 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("BaseUrl")
-    fun provideBaseUrl(): String = "https://api-agrojaya.febriandi.my.id/"
+    fun provideBaseUrl(): String = Constant.BASE_URL
 
     //Url API data wilayah Indonesia
     @Provides
     @Singleton
     @Named("LocationBaseUrl")
-    fun provideLocationBaseUrl(): String = "https://ibnux.github.io/data-indonesia/"
+    fun provideLocationBaseUrl(): String = Constant.LOCATION_BASE_URL
 
     @Provides
     @Singleton

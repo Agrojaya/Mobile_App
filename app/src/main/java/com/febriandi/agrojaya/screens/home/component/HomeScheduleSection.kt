@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Component aktivitas home
 @Composable
 fun HomeScheduleSection(rootNavController: NavController) {
     Column {

@@ -20,6 +20,7 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Halaman Syarat dan Ketentuan
 @Composable
 fun SyaratDanKetentuanScreen(
     rootNavController: NavController
@@ -29,7 +30,6 @@ fun SyaratDanKetentuanScreen(
     val termsText = buildAnnotatedString {
         append("Selamat datang di Agrojaya! Aplikasi ini menyediakan layanan pemasangan urban farming yang membantu Anda menciptakan solusi pertanian modern di lingkungan perkotaan. Dengan menggunakan aplikasi kami, Anda menyetujui Syarat dan Ketentuan berikut: \n\n")
 
-        // Sections with styled headers
         sections.forEach { (header, content) ->
             withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                 append("$header\n")
@@ -37,7 +37,6 @@ fun SyaratDanKetentuanScreen(
             append("$content\n\n")
         }
 
-        // Closing statement
         append("\nDengan menggunakan aplikasi Agrojaya, Anda dianggap telah membaca, memahami, dan menyetujui seluruh Syarat dan Ketentuan ini.")
         append("Jika Anda memiliki pertanyaan lebih lanjut, silakan hubungi layanan pelanggan kami melalui aplikasi atau email resmi Agrojaya.")
     }

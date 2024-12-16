@@ -1,7 +1,5 @@
 package com.febriandi.agrojaya.screens.profile
 
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +39,7 @@ import com.febriandi.agrojaya.screens.login.LoginViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman Profile
 @Composable
 fun ProfileScreen(
     rootNavController: NavController,
@@ -64,7 +63,7 @@ fun ProfileScreen(
             .padding(horizontal = 20.dp)
             .verticalScroll(scrollState)
     ) {
-        // Logo
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,8 +77,7 @@ fun ProfileScreen(
                     .align(Alignment.TopEnd)
             )
         }
-
-        // Profile Header
+        
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier

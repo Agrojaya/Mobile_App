@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+//viewmodel lupa password
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val auth: FirebaseAuth
@@ -29,7 +30,6 @@ class ForgotPasswordViewModel @Inject constructor(
         viewModelScope.launch {
             _resetPasswordState.value = Resource.Loading()
             try {
-                // Kirim email reset password
                 auth.sendPasswordResetEmail(_emailState.value).await()
                 _resetPasswordState.value = Resource.Success(true)
             } catch (e: Exception) {
@@ -40,7 +40,6 @@ class ForgotPasswordViewModel @Inject constructor(
         }
     }
 
-    // Reset state untuk mencegah berulangnya pesan sukses/error
     fun resetState() {
         _resetPasswordState.value = Resource.Loading()
     }

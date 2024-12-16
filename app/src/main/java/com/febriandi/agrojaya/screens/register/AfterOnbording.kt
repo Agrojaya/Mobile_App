@@ -47,6 +47,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Text as Text
 
+//Halaman setelah onboarding
 @Composable
 fun AfterOnboarding(
     navController: NavController,
@@ -55,9 +56,7 @@ fun AfterOnboarding(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState(initial = null)
-    val googleLoginState = viewModel.stateGoogle.value
 
-    // Google Sign-In launcher
     @Suppress("DEPRECATION")
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
@@ -66,7 +65,6 @@ fun AfterOnboarding(
                 val result = account.getResult(ApiException::class.java)
                 val credential = GoogleAuthProvider.getCredential(result.idToken, null)
 
-                // Firebase authentication
                 viewModel.loginWithGoogle(credential) {
                     navController.navigate("mainScreen") {
                         popUpTo("onboarding") {
@@ -158,7 +156,7 @@ fun AfterOnboarding(
                 launcher.launch(googleSignInClient.signInIntent)
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent // Transparent background
+                containerColor = Color.Transparent
             ),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -167,7 +165,7 @@ fun AfterOnboarding(
                 .padding(horizontal = 30.dp)
                 .border(
                     width = 1.dp,
-                    color = colorResource(id = R.color.natural_200), // Border color
+                    color = colorResource(id = R.color.natural_200),
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {

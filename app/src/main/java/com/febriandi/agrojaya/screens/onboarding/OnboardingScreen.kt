@@ -1,6 +1,5 @@
 package com.febriandi.agrojaya.screens.onboarding
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,9 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-@OptIn(ExperimentalFoundationApi::class)
+//Halaman onboarding
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {
     val pages: List<OnboardingModel> = listOf(
@@ -35,10 +33,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         pages.size
     }
 
-    // Coroutine scope for handling page navigation
+
     val scope = rememberCoroutineScope()
 
-    // Dynamically set button text based on current page
     val buttonText: State<String> = remember {
         derivedStateOf {
             when (pagerState.currentPage) {
@@ -57,18 +54,18 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     ) {
         Spacer(modifier = Modifier.size(5.dp))
 
-        // Horizontal Pager for onboarding screens
+
         HorizontalPager(state = pagerState) { index ->
             OnboardingGraphUI(onboardingModel = pages[index])
         }
 
-        // Page indicator
+
         IndicatorUI(
             pageSize = pages.size,
             currentPage = pagerState.currentPage
         )
 
-        // Button at the bottom
+
         ButtonUI(
             text = buttonText.value,
             onClick = {
@@ -88,6 +85,5 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 @Composable
 fun OnboardingScreenPreview() {
     OnboardingScreen {
-        // Action when onboarding is finished
     }
 }

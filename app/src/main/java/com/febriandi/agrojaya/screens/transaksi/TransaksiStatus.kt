@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,13 +37,11 @@ import com.febriandi.agrojaya.component.ButtonComponent
 import com.febriandi.agrojaya.model.PaymentStatus
 import com.febriandi.agrojaya.screens.transaksi.viewmodel.DetailTransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
-import com.febriandi.agrojaya.utils.Constant.CLIENT
 import com.febriandi.agrojaya.utils.Resource
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+//Halaman Status Transaksi
 @Composable
 fun TransaksiStatus(
     navController: NavController,
@@ -120,7 +116,6 @@ private fun TransaksiStatusContent(
     onItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Fungsi untuk mengubah format tanggal
     fun formatDate(dateString: String): String {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("id", "ID"))
@@ -142,7 +137,6 @@ private fun TransaksiStatusContent(
         }
     }
 
-    // Variabel untuk menentukan gambar, teks status, dan deskripsi
     val (imageResource, statusText, descriptionText) = when (payment.transaction_status) {
         "settlement" -> Triple(
             R.drawable.status_sukses,
@@ -238,7 +232,7 @@ private fun TransaksiStatusContent(
             onClick = { onItemBack ()
                },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent // Transparent background
+                containerColor = Color.Transparent
             ),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -247,7 +241,7 @@ private fun TransaksiStatusContent(
                 .padding(horizontal = 20.dp)
                 .border(
                     width = 1.dp,
-                    color = colorResource(id = R.color.green_400), // Border color
+                    color = colorResource(id = R.color.green_400),
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {

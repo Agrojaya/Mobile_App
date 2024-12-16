@@ -1,6 +1,5 @@
 package com.febriandi.agrojaya.screens.home.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -22,7 +21,7 @@ import kotlinx.coroutines.yield
 import com.febriandi.agrojaya.R
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalFoundationApi::class)
+//Component Carousel di home
 @Composable
 fun PaketCarousel(
     paketList: List<PaketResponse>,
@@ -33,7 +32,6 @@ fun PaketCarousel(
         pageCount = { paketList.size }
     )
 
-    // Auto-scroll effect
     LaunchedEffect(Unit) {
         while (true) {
             yield()
@@ -69,7 +67,7 @@ fun PaketCarousel(
             )
         }
 
-        // Page Indicators
+
         PageIndicator(
             pageCount = paketList.size,
             currentPage = pagerState.currentPage

@@ -2,7 +2,6 @@ package com.febriandi.agrojaya.screens.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,13 +15,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,11 +46,11 @@ import androidx.navigation.NavController
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Halaman Ganti Password
 @Composable
 fun GantiPasswordScreen(
     viewModel: ChangePasswordViewModel = hiltViewModel(),
@@ -75,12 +71,10 @@ fun GantiPasswordScreen(
     LaunchedEffect(changePasswordState) {
         when (val state = changePasswordState) {
             is Resource.Success -> {
-                // Reset form fields
                 viewModel.updateCurrentPassword("")
                 viewModel.updateNewPassword("")
                 viewModel.updateConfirmPassword("")
 
-                // Show Toast message
                 Toast.makeText(context, "Kata sandi berhasil diubah", Toast.LENGTH_SHORT).show()
 
                 onPasswordChangeSuccess()
@@ -102,24 +96,7 @@ fun GantiPasswordScreen(
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                ButtonBack{
-                    navController.popBackStack()
-                }
-                Text(
-                    text = "Ganti Kata Sandi",
-                    modifier = Modifier.padding(start = 16.dp),
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
+            Header(navController, title = "Ganti Kata Sandi")
 
             Column(
                 modifier = Modifier
@@ -251,8 +228,6 @@ fun GantiPasswordScreen(
                 )
             }
 
-
-            // Button placed at the bottom
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

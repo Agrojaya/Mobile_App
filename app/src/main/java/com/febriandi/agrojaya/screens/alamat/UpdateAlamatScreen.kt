@@ -17,7 +17,7 @@ import com.febriandi.agrojaya.screens.alamat.tambahAlamat.FormContent
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.LoadingOverlay
 import com.febriandi.agrojaya.screens.alamat.tambahAlamat.SubmitButton
 
-//Halama Update Alamat
+//Halaman Update Alamat
 @Composable
 fun UpdateAlamatScreen(
     navController: NavController,

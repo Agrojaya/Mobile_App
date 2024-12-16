@@ -31,6 +31,7 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.AlamatResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//component alamat transaksi
 @Composable
 fun AlamatCard(
     alamat: AlamatResponse,

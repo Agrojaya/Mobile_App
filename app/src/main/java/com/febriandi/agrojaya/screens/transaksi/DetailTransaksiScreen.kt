@@ -1,17 +1,14 @@
 package com.febriandi.agrojaya.screens.transaksi
 
-import android.media.Image
+
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,13 +16,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -61,12 +55,14 @@ import coil.compose.AsyncImage
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.component.ButtonBack
 import com.febriandi.agrojaya.component.ButtonComponent
+import com.febriandi.agrojaya.component.Header
 import com.febriandi.agrojaya.model.TransaksiResponse
 import com.febriandi.agrojaya.screens.transaksi.component.OrderStatusItem
 import com.febriandi.agrojaya.screens.transaksi.viewmodel.DetailTransaksiViewModel
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 import com.febriandi.agrojaya.utils.Resource
 
+//Halaman detail transaksi
 @Composable
 fun DetailTransaksi(
     navController: NavController,
@@ -94,9 +90,7 @@ fun DetailTransaksi(
             is Resource.Success -> {
                 DetailTransaksiContent(
                     transaksi = state.data,
-                    onBackClick = {
-                        navController.navigateUp()
-                    },
+                    navController = navController,
                     onItemCliked = {
                         navController.navigate(
                             "payment-webview/${Uri.encode(state.data.snap_redirect_url)}/${Uri.decode(state.data.order_id)}"
@@ -139,7 +133,7 @@ fun DetailTransaksi(
 @Composable
 fun DetailTransaksiContent(
     transaksi: TransaksiResponse,
-    onBackClick: () -> Unit,
+    navController: NavController,
     onItemCliked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -153,22 +147,7 @@ fun DetailTransaksiContent(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                ButtonBack(onClick = onBackClick)
-                Text(
-                    text = "Detail Pesanan",
-                    modifier = Modifier.padding(start = 16.dp),
-                    fontSize = 16.sp,
-                    fontFamily = CustomFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.text_color)
-                )
-            }
+            Header(navController, "Detail Pesanan")
 
             Column(
                 modifier = Modifier
@@ -176,7 +155,7 @@ fun DetailTransaksiContent(
                     .weight(1f)
                     .verticalScroll(scrollState)
             ) {
-                // Payment Status Section
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp),
@@ -214,7 +193,7 @@ fun DetailTransaksiContent(
                     }
                 }
 
-                // Address Section
+
                 Card(
                     modifier = Modifier.fillMaxWidth()
                         .padding(20.dp),
@@ -259,7 +238,7 @@ fun DetailTransaksiContent(
                         )
                     }
                 }
-                // Order Details Section
+
                 Card(
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 20.dp),
@@ -404,40 +383,4 @@ fun DetailTransaksiContent(
         }
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailTransaksiContentPreview() {
-    val sampleTransaksi = TransaksiResponse(
-        id = 1,
-        order_id = "ORDER123",
-        uid = "USER456",
-        paket_id = 1,
-        alamat_id = 1,
-        total_harga = 500000,
-        variasi_bibit = "Bayam, kangkung, sawi, pak coi, pete, cabe, Bayam, kangkung, sawi,",
-        tanggal = "03 Desember 2024",
-        status_pembayaran = "Menunggu Pembayaran",
-        status_transaksi = "Pesanan Dibuat",
-        snap_token = "token123",
-        snap_redirect_url = "https://example.com",
-        nama_paket = "Paket Dasar",
-        photo_paket = "https://example.com/photo.jpg",
-        nama_alamat = "Adjie Cahya Ramadhan",
-        noHp = "081298392829",
-        provinsi = "Kepulauan Riau",
-        kabupaten = "Tanjungpinang",
-        kecamatan = "Tanjungpinang Timur",
-        kelurahan = "Pinang Kencana",
-        alamatLengkap = "Perum Alam Tirta Lestari Blok Angsana 2 no 14",
-        catatan = "Kirim di pagi hari"
-    )
-
-    DetailTransaksiContent(
-        transaksi = sampleTransaksi,
-        onBackClick = {},
-        onItemCliked = {},
-        modifier = Modifier
-    )
 }

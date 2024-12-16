@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -31,6 +30,7 @@ import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.model.PaketResponse
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
+//Paket Item
 @Composable
 fun PaketItem(
     paket: PaketResponse,
@@ -50,7 +50,6 @@ fun PaketItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Background Image
             AsyncImage(
                 model = paket.photo,
                 contentDescription = null,
@@ -75,7 +74,6 @@ fun PaketItem(
                 }
             }
 
-            // Semi-transparent overlay for better text readability
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,7 +91,6 @@ fun PaketItem(
                     )
             ) {}
 
-            // Content Column
             Column(
                 modifier = Modifier
                     .fillMaxSize()

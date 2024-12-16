@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//Viewmodel Daftar Transaksi
 @HiltViewModel
 class DaftarTransaksiViewModel @Inject constructor(
     private val repository: TransaksiRepository

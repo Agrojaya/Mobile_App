@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//Detail paket viewmodel
 @HiltViewModel
 class DetailPaketViewModel @Inject constructor(
     private val repository: PaketRepository
@@ -18,6 +19,7 @@ class DetailPaketViewModel @Inject constructor(
     private val _paketState = MutableStateFlow<Resource<PaketResponse>>(Resource.Loading)
     val paketState: StateFlow<Resource<PaketResponse>> = _paketState
 
+    //mendapatkan data paket berdasarkan id
     fun loadPaket(id : Int) {
         viewModelScope.launch {
             _paketState.value = Resource.Loading

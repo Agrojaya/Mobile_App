@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
-
+//Order status item
 @Composable
 fun OrderStatusItem(
     status: String,

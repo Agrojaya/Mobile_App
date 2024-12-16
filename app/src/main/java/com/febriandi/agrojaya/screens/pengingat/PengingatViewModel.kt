@@ -20,6 +20,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
 
+//viewmodel pengingat
 @HiltViewModel
 class PengingatViewModel @Inject constructor(
     private val pengingatRepository: PengingatRepository,
