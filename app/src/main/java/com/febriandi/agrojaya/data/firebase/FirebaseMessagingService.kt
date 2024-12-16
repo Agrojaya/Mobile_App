@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.febriandi.agrojaya.R
 import com.febriandi.agrojaya.data.Repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 //FirebaseMessagingService
 @AndroidEntryPoint
-class MyFirebaseMessagingService : FirebaseMessagingService() {
+class MyFirebaseMessagingService @Inject constructor() : FirebaseMessagingService() {
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -73,6 +74,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         Log.d("FCM_MESSAGE", "Showing notification with title: $title")
         notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
+    }
+
+
+    fun updateFirebaseToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                val currentUser = firebaseAuth.currentUser
+
+                currentUser?.let { user ->
+                    Log.d("FCM_TOKEN", "Updating token for user: ${user.uid}")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        userRepository.updateFCMToken(user.uid, token)
+                    }
+                }
+            } else {
+                Log.w("FCM_TOKEN", "Fetching FCM registration token failed", task.exception)
+            }
+        }
     }
 
     //Menyimpan FCM Token ke backend

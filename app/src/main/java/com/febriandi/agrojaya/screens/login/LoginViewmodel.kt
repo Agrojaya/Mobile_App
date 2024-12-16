@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.febriandi.agrojaya.data.Repository.UserGoogleRepository
 import com.febriandi.agrojaya.data.Repository.UserRepository
 import com.febriandi.agrojaya.data.firebase.AuthRepository
+import com.febriandi.agrojaya.data.firebase.MyFirebaseMessagingService
 import com.febriandi.agrojaya.data.firebase.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.messaging.FirebaseMessaging
@@ -23,6 +24,7 @@ import javax.inject.Inject
 //view model login
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val myFirebaseMessagingService: MyFirebaseMessagingService,
     private val repository: AuthRepository,
     private val userRepository: UserRepository,
     private val userGoogleRepository: UserGoogleRepository
@@ -48,14 +50,38 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private suspend fun updateFCMToken(uid: String): Resource<Boolean> {
+        return try {
+            val fcmToken = getFCMToken()
+            val result = userRepository.updateFCMToken(uid, fcmToken)
+            Resource.Success(result is Resource.Success)
+        } catch (e: Exception) {
+            Resource.Error("Gagal memperbarui FCM Token: ${e.message}")
+        }
+    }
+
     fun loginUser(email: String, password: String, home: () -> Unit) {
         viewModelScope.launch {
             repository.loginUser(email = email, password = password).collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        repository.saveLoginState(true) // Simpan status login
-                        _state.send(LoginState(success = "Login Berhasil"))
-                        home()
+                        val uid = result.data?.uid
+                        uid?.let {
+                            // Update FCM Token
+                            when (val tokenResult = updateFCMToken(it)) {
+                                is Resource.Success -> {
+                                    repository.saveLoginState(true)
+                                    _state.send(LoginState(success = "Login Berhasil"))
+                                    home()
+                                }
+                                is Resource.Error -> {
+                                    _state.send(LoginState(error = tokenResult.message))
+                                }
+                                else -> {}
+                            }
+                        } ?: run {
+                            _state.send(LoginState(error = "Gagal mendapatkan User ID"))
+                        }
                     }
                     is Resource.Loading -> {
                         _state.send(LoginState(loading = true))
@@ -77,9 +103,18 @@ class LoginViewModel @Inject constructor(
                         val fcmToken = getFCMToken()
                         when (val apiResult = userRepository.createUser(uid, username, email, fcmToken)) {
                             is Resource.Success -> {
-                                repository.saveLoginState(true) // Simpan status login
-                                _state.send(LoginState(success = "Register Berhasil"))
-                                home()
+                                // Update FCM Token setelah create user
+                                when (val tokenResult = updateFCMToken(uid)) {
+                                    is Resource.Success -> {
+                                        repository.saveLoginState(true)
+                                        _state.send(LoginState(success = "Register Berhasil"))
+                                        home()
+                                    }
+                                    is Resource.Error -> {
+                                        _state.send(LoginState(error = tokenResult.message))
+                                    }
+                                    else -> {}
+                                }
                             }
                             is Resource.Error -> {
                                 _state.send(LoginState(error = apiResult.message))
@@ -115,9 +150,18 @@ class LoginViewModel @Inject constructor(
 
                                 when (val apiResult = userGoogleRepository.saveGoogleUser(uid, email, username, fcmToken)) {
                                     is Resource.Success -> {
-                                        repository.saveLoginState(true) // Simpan status login
-                                        _stateGoogle.value = LoginGoogleState(success = firebaseUser)
-                                        home()
+                                        // Update FCM Token setelah save Google user
+                                        when (val tokenResult = updateFCMToken(uid)) {
+                                            is Resource.Success -> {
+                                                repository.saveLoginState(true)
+                                                _stateGoogle.value = LoginGoogleState(success = firebaseUser)
+                                                home()
+                                            }
+                                            is Resource.Error -> {
+                                                _stateGoogle.value = LoginGoogleState(error = tokenResult.message)
+                                            }
+                                            else -> {}
+                                        }
                                     }
                                     is Resource.Error -> {
                                         _stateGoogle.value = LoginGoogleState(error = apiResult.message)
@@ -143,6 +187,7 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
 
     fun signOut(onSignOutComplete: () -> Unit) {
         viewModelScope.launch {
