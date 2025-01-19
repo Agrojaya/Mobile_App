@@ -23,6 +23,7 @@ import com.febriandi.agrojaya.screens.home.HomeScreen
 import com.febriandi.agrojaya.screens.Paket.PaketScreen
 import com.febriandi.agrojaya.screens.profile.ProfileScreen
 import com.febriandi.agrojaya.screens.artikel.DetailArtikelScreen
+import com.febriandi.agrojaya.screens.transaksi.DaftarTransaksiScreen
 import com.febriandi.agrojaya.ui.theme.CustomFontFamily
 
 
@@ -32,6 +33,7 @@ fun MainScreen(rootNavController: NavController) {
     val navItemList = listOf(
         NavItem("Beranda", R.drawable.icon_home),
         NavItem("Paket", R.drawable.icon_paket),
+        NavItem("Transaksi", R.drawable.transaksi),
         NavItem("Profile", R.drawable.icon_profile),
     )
 
@@ -43,7 +45,8 @@ fun MainScreen(rootNavController: NavController) {
     val selectedIndex = when (currentRoute) {
         "home" -> 0
         "paket" -> 1
-        "profile" -> 2
+        "transaksi" -> 2
+        "profile" -> 3
         else -> 0
     }
 
@@ -66,7 +69,11 @@ fun MainScreen(rootNavController: NavController) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
-                                2 -> navController.navigate("profile") {
+                                2 -> navController.navigate("transaksi") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                3 -> navController.navigate("profile") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -128,6 +135,13 @@ fun MainScreen(rootNavController: NavController) {
                 PaketScreen(
                     navController = navController,
                     rootNavController = rootNavController
+                )
+            }
+            //Halaman Transaksi
+            composable("transaksi") {
+                DaftarTransaksiScreen(
+                    navController = navController,
+                    rootNavController = rootNavController,
                 )
             }
             //Halaman Profile

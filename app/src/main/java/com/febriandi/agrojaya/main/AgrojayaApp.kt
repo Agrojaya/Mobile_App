@@ -106,11 +106,11 @@ fun AgrojayaApp(
             AlamatScreen(navController = navController)
         }
 
-        //Halaman Daftar Transaksi
-        composable("daftarTransaksi") {
-            DaftarTransaksiScreen(
-                navController = navController)
-        }
+//        //Halaman Daftar Transaksi
+//        composable("daftarTransaksi") {
+//            DaftarTransaksiScreen(
+//                navController = navController)
+//        }
 
         //Halaman Tambah alamat
         composable("tambahAlamat") {

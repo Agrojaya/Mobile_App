@@ -40,6 +40,7 @@ import com.febriandi.agrojaya.utils.Resource
 //Halaman daftar transaksi
 @Composable
 fun DaftarTransaksiScreen(
+    rootNavController: NavController,
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: DaftarTransaksiViewModel = hiltViewModel()
@@ -55,7 +56,14 @@ fun DaftarTransaksiScreen(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
     ){
-        Header(navController, "Pesanan Saya")
+        Text(
+            modifier = Modifier.padding(20.dp),
+            text = "Daftar Transaksi",
+            fontSize = 16.sp,
+            fontFamily = CustomFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            color = colorResource(id = R.color.text_color)
+        )
 
         Box(modifier = Modifier.fillMaxSize()) {
             when (val currentState = transaksiState) {
@@ -82,7 +90,7 @@ fun DaftarTransaksiScreen(
                                 TransaksiItem(
                                     transaksi = transaksi,
                                     onItemClicked = { orderId ->
-                                        navController.navigate("detailTransaksi/$orderId")
+                                        rootNavController.navigate("detailTransaksi/$orderId")
                                     }
                                 )
                             }

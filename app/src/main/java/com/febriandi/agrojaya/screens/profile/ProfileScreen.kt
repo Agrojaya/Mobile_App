@@ -155,52 +155,6 @@ fun ProfileScreen(
                 )
             }
         }
-        Column (
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(colorResource(id = R.color.green_100))
-                .padding(12.dp)
-                .height(50.dp)
-                .clickable {
-                    rootNavController.navigate("daftarTransaksi")
-                }
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.box),
-                    contentDescription = null,
-                    tint = colorResource(id = R.color.green_400),
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column {
-                    Text(
-                        text = "Pesanan Saya",
-                        color = colorResource(id = R.color.text_color),
-                        fontSize = 14.sp,
-                        fontFamily = CustomFontFamily,
-                        fontWeight = FontWeight.Medium
-                    )
-
-                        Text(
-                            text = "Lihat transaksi anda di sini",
-                            color = Color.Gray,
-                            fontSize = 12.sp,
-                            fontFamily = CustomFontFamily
-                        )
-
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         Column (
             verticalArrangement = Arrangement.Center,
